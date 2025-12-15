@@ -17,4 +17,10 @@ class FarmerRepository:
     def get_by_username(self, username: str):
         return self.db.query(Farmer).filter(Farmer.username == username).first()
     
+    def link_phone_to_farmer(self, farmer: Farmer, phone: str):
+        """Link a phone number to a farmer account."""
+        farmer.phone = phone
+        self.db.commit()
+        self.db.refresh(farmer)
+        return farmer
  
