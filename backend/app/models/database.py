@@ -43,8 +43,8 @@ class ParcelIndex(Base):
     
     parcel = relationship("Parcel", back_populates="indices")
 
-class FarmerPreference(Base):
-    __tablename__ = "farmer_preferences"
+class FarmerReport(Base):
+    __tablename__ = "farmer_reports"
     
     id = Column(String, primary_key=True)
     phone = Column(String, nullable=False, unique=True)

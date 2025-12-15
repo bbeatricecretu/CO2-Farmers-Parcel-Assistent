@@ -21,9 +21,9 @@ class ReportService:
     
     def get_report_frequency(self, phone: str) -> str:
         """Get current report frequency for a farmer."""
-        preference = self.report_repo.get_by_phone(phone)
+        report = self.report_repo.get_by_phone(phone)
         
-        if preference:
-            return preference.report_frequency
+        if report:
+            return report.report_frequency
         
         return "weekly"  # Default frequency

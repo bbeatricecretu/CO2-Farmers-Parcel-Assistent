@@ -1,29 +1,29 @@
 from sqlalchemy.orm import Session
-from app.models.database import FarmerPreference
+from app.models.database import FarmerReport
 
 class ReportRepository:
     def __init__(self, db: Session):
         self.db = db
     
     def get_by_phone(self, phone: str):
-        """Get farmer preference by phone number."""
-        return self.db.query(FarmerPreference).filter(FarmerPreference.phone == phone).first()
+        """Get farmer report settings by phone number."""
+        return self.db.query(FarmerReport).filter(FarmerReport.phone == phone).first()
     
     def create_or_update(self, phone: str, report_frequency: str):
-        """Create or update farmer preference."""
-        preference = self.get_by_phone(phone)
+        """Create or update farmer report settings."""
+        report = self.get_by_phone(phone)
         
-        if preference:
-            preference.report_frequency = report_frequency
+        if report:
+            report.report_frequency = report_frequency
         else:
             import uuid
-            preference = FarmerPreference(
-                id=f"PREF_{uuid.uuid4().hex[:8].upper()}",
+            report = FarmerReport(
+                id=f"REP_{uuid.uuid4().hex[:8].upper()}",
                 phone=phone,
                 report_frequency=report_frequency
             )
-            self.db.add(preference)
+            self.db.add(report)
         
         self.db.commit()
-        self.db.refresh(preference)
-        return preference
+        self.db.refresh(report)
+        return report
