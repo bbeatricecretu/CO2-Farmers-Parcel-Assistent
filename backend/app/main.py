@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from app.storage.db import init_db # load Json files and create tables 
+from app.storage.database import init_db # load Json files and create tables 
 from app.api import manage #import router module
 
 app = FastAPI(title="Farmers Parcel Assistant API")

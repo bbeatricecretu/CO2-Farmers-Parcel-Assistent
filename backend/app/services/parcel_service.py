@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
-from app.models.database import Farmer, Parcel
+from app.models.base import Farmer, Parcel
 from app.repositories.parcel_repo import ParcelRepository
-from app.services.index_interpretation_service import IndexInterpretationService
+from app.services.index_service import IndexInterpretationService
 
 class ParcelService:
     def __init__(self, db: Session):

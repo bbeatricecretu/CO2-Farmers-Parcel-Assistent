@@ -1,8 +1,8 @@
 import json
 from datetime import datetime
 from sqlalchemy.orm import Session
-from app.storage.db import SessionLocal, init_db
-from app.models.database import Farmer, Parcel, ParcelIndex, FarmerReport
+from app.storage.database import SessionLocal, init_db
+from app.models.base import Farmer, Parcel, ParcelIndex, FarmerReport
 import uuid
 
 def load_json_file(filepath: str):

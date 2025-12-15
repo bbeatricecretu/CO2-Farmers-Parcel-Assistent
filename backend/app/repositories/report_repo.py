@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from app.models.database import FarmerReport
+from app.models.base import FarmerReport
 import uuid
 
 class ReportRepository:

@@ -3,7 +3,7 @@ from app.repositories.farmer_repo import FarmerRepository
 from app.repositories.parcel_repo import ParcelRepository
 from app.repositories.report_repo import ReportRepository
 from app.repositories.index_repo import IndexRepository
-from app.services.index_interpretation_service import IndexInterpretationService
+from app.services.index_service import IndexInterpretationService
 from datetime import datetime
 from typing import List, Dict
 

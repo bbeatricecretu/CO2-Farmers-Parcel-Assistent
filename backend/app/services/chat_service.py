@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from app.models.database import Farmer
+from app.models.base import Farmer
 from app.services.intent_service import IntentService
 from app.services.farmer_service import FarmerService
 from app.services.parcel_service import ParcelService

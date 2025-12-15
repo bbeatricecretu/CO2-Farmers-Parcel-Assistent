@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from app.models.database import Farmer
+from app.models.base import Farmer
 
 class FarmerRepository:
     def __init__(self, db: Session):

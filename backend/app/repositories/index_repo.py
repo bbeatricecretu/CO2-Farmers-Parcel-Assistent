@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from app.models.database import ParcelIndex
+from app.models.base import ParcelIndex
 
 class IndexRepository:
     def __init__(self, db: Session):

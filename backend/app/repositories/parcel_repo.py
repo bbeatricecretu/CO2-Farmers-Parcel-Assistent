@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from app.models.database import Parcel
+from app.models.base import Parcel
 
 class ParcelRepository:
     def __init__(self, db: Session):
