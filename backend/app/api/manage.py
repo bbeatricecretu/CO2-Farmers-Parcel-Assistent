@@ -6,6 +6,18 @@ from app.models.database import Farmer
 
 router = APIRouter(tags=["message"])
 
+# Intent detection
+LIST_KEYWORDS = {"parcel", "parcels", "field", "fields"}
+ACTION_KEYWORDS = {"show", "list", "see", "get", "what"}
+
+def detect_intent(message):
+    words = set(message.lower().split())
+    
+    if words & LIST_KEYWORDS and words & ACTION_KEYWORDS:
+        return "LIST_PARCELS"
+    
+    return "UNKNOWN"
+
 class MessageRequest(BaseModel):
     from_: str = Field(..., alias="from")
     text: str
@@ -25,12 +37,28 @@ def message(payload: MessageRequest, db: Session = Depends(get_db)):
     # Check if phone number is already linked to a farmer
     farmer = db.query(Farmer).filter(Farmer.phone == payload.from_).first()
     
-    if farmer:
-        # User is linked - respond normally
-        reply = f"Hello {farmer.username}! Your account is linked. You can now ask about your parcels."
-    else:
+    if not farmer:
         # User is not linked - start onboarding
         reply = "Welcome! Please type your username to link your account."
+    else:
+        # User is linked - detect intent
+        intent = detect_intent(payload.text)
+        
+        if intent == "LIST_PARCELS":
+            # Get farmer's parcels
+            parcels = farmer.parcels
+            
+            if parcels:
+                parcel_list = "\n".join([
+                    f"- {p.id}: {p.name} ({p.area_ha} ha, {p.crop})"
+                    for p in parcels
+                ])
+                reply = f"Your parcels:\n{parcel_list}"
+            else:
+                reply = "You don't have any parcels registered."
+        else:
+            # Default response
+            reply = f"Hello {farmer.username}! Your account is linked. You can now ask about your parcels."
     
     return {"reply": reply}
 
