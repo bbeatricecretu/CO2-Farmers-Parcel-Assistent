@@ -28,5 +28,11 @@ class ChatService:
                 return self.parcel_service.get_parcel_details(parcel_id, farmer)
             else:
                 return "Please specify a parcel ID (e.g., P1, P2)."
+        elif intent == "PARCEL_STATUS":
+            parcel_id = self.intent_service.extract_parcel_id(text)
+            if parcel_id:
+                return self.parcel_service.get_parcel_status(parcel_id, farmer)
+            else:
+                return "Please specify a parcel ID (e.g., P1, P2)."
         else:
             return f"Hello {farmer.username}! Your account is linked. You can now ask about your parcels."
