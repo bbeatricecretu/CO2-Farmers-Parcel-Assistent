@@ -3,7 +3,8 @@ from sqlalchemy.orm import Session
 from app.storage.db import get_db
 from app.services.chat_service import ChatService
 from app.services.farmer_service import FarmerService
-from app.api.schemas import MessageRequest, MessageResponse, LinkRequest, LinkResponse
+from app.services.report_generation_service import ReportGenerationService
+from app.api.schemas import MessageRequest, MessageResponse, LinkRequest, LinkResponse, GenerateReportsResponse, ReportItem
 
 router = APIRouter(tags=["message"])
 
@@ -18,3 +19,9 @@ def link_account(payload: LinkRequest, db: Session = Depends(get_db)):
     farmer_service = FarmerService(db)
     reply = farmer_service.link_account(payload.phone, payload.username)
     return {"reply": reply}
+
+@router.post("/generate-reports", response_model=list[ReportItem])
+def generate_reports(db: Session = Depends(get_db)):
+    report_service = ReportGenerationService(db)
+    reports = report_service.generate_reports()
+    return reports

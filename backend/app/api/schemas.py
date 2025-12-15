@@ -13,3 +13,10 @@ class LinkRequest(BaseModel):
 
 class LinkResponse(BaseModel):
     reply: str
+
+class ReportItem(BaseModel):
+    to: str
+    message: str
+
+class GenerateReportsResponse(BaseModel):
+    reports: list[ReportItem]

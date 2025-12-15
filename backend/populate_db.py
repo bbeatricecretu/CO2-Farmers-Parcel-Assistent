@@ -2,7 +2,8 @@ import json
 from datetime import datetime
 from sqlalchemy.orm import Session
 from app.storage.db import SessionLocal, init_db
-from app.models.database import Farmer, Parcel, ParcelIndex
+from app.models.database import Farmer, Parcel, ParcelIndex, FarmerReport
+import uuid
 
 def load_json_file(filepath: str):
     with open(filepath, 'r', encoding='utf-8') as f:
@@ -15,6 +16,15 @@ def populate_database():
     db: Session = SessionLocal()
     
     try:
+        # Clear existing data
+        print("Clearing existing data...")
+        db.query(ParcelIndex).delete()
+        db.query(Parcel).delete()
+        db.query(FarmerReport).delete()
+        db.query(Farmer).delete()
+        db.commit()
+        print("Database cleared")
+        
         print("Loading farmers...")
         farmers_data = load_json_file('data/farmers.json')
         for farmer_data in farmers_data:
@@ -64,6 +74,19 @@ def populate_database():
                 index_count += 1
         db.commit()
         print(f"Loaded {index_count} parcel indices")
+        
+        print("Initializing farmer reports...")
+        # Initialize farmer_reports for all linked farmers with frequency "none"
+        farmers = db.query(Farmer).filter(Farmer.phone.isnot(None)).all()
+        for farmer in farmers:
+            farmer_report = FarmerReport(
+                id=f"REP_{uuid.uuid4().hex[:8].upper()}",
+                phone=farmer.phone,
+                report_frequency="none"
+            )
+            db.add(farmer_report)
+        db.commit()
+        print(f"Initialized {len(farmers)} farmer reports with frequency 'none'")
         
         print("Database populated successfully!")
         
