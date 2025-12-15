@@ -42,3 +42,10 @@ class ParcelIndex(Base):
     ph = Column(Float, nullable=True)
     
     parcel = relationship("Parcel", back_populates="indices")
+
+class FarmerPreference(Base):
+    __tablename__ = "farmer_preferences"
+    
+    id = Column(String, primary_key=True)
+    phone = Column(String, nullable=False, unique=True)
+    report_frequency = Column(String, nullable=False, default="weekly")  # daily, weekly, or custom (e.g., "2 days")
