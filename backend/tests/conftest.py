@@ -24,11 +24,11 @@ def test_db():
 
 @pytest.fixture
 def sample_farmer(test_db):
-    """Create a sample farmer for testing."""
+    """Create a sample farmer for testing - based on Ana Popescu from real data."""
     farmer = Farmer(
-        id="F001",
-        username="john_doe",
-        name="John Doe",
+        id="F1",
+        username="ana.popescu",
+        name="Ana Popescu",
         phone="+40741111111"
     )
     test_db.add(farmer)
@@ -38,12 +38,12 @@ def sample_farmer(test_db):
 
 @pytest.fixture
 def sample_parcel(test_db, sample_farmer):
-    """Create a sample parcel for testing."""
+    """Create a sample parcel for testing - based on North Field from real data."""
     parcel = Parcel(
-        id="P001",
+        id="P1",
         farmer_id=sample_farmer.id,
-        name="Field 1",
-        area_ha=10.5,
+        name="North Field",
+        area_ha=12.3,
         crop="Wheat"
     )
     test_db.add(parcel)
@@ -53,27 +53,33 @@ def sample_parcel(test_db, sample_farmer):
 
 @pytest.fixture
 def sample_indices(test_db, sample_parcel):
-    """Create sample indices for testing."""
+    """Create sample indices for testing - based on real data patterns."""
     indices = [
         ParcelIndex(
-            id="IDX001",
+            id="P1_IDX1",
             parcel_id=sample_parcel.id,
-            date=date(2024, 1, 1),
-            ndvi=0.7,
-            ndmi=0.5,
-            ndwi=0.3,
-            nitrogen=50.0,
-            ph=6.5
+            date=date(2025, 4, 1),
+            ndvi=0.42,
+            ndmi=0.2,
+            ndwi=0.15,
+            soc=1.7,
+            nitrogen=0.8,
+            phosphorus=0.35,
+            potassium=0.6,
+            ph=6.4
         ),
         ParcelIndex(
-            id="IDX002",
+            id="P1_IDX2",
             parcel_id=sample_parcel.id,
-            date=date(2024, 2, 1),
-            ndvi=0.8,
-            ndmi=0.6,
-            ndwi=0.4,
-            nitrogen=55.0,
-            ph=6.8
+            date=date(2025, 5, 1),
+            ndvi=0.63,
+            ndmi=0.32,
+            ndwi=0.22,
+            soc=1.7,
+            nitrogen=0.75,
+            phosphorus=0.33,
+            potassium=0.59,
+            ph=6.4
         )
     ]
     for index in indices:

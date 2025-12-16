@@ -8,7 +8,7 @@ class TestReportGenerationService:
     def test_should_receive_report_daily(self, test_db, sample_farmer):
         """Test daily report frequency."""
         report = FarmerReport(
-            id="REP002",
+            id="R1",
             phone=sample_farmer.phone,
             report_frequency="daily",
             last_sent=None
@@ -24,7 +24,7 @@ class TestReportGenerationService:
     def test_should_receive_report_weekly_never_sent(self, test_db, sample_farmer):
         """Test weekly report when never sent before."""
         report = FarmerReport(
-            id="REP003",
+            id="R2",
             phone=sample_farmer.phone,
             report_frequency="weekly",
             last_sent=None
@@ -41,7 +41,7 @@ class TestReportGenerationService:
     def test_should_receive_report_custom_days(self, test_db, sample_farmer):
         """Test custom days report frequency."""
         report = FarmerReport(
-            id="REP006",
+            id="R3",
             phone=sample_farmer.phone,
             report_frequency="3 days",
             last_sent=date.today() - timedelta(days=3)
@@ -57,7 +57,7 @@ class TestReportGenerationService:
     def test_should_not_receive_report_none(self, test_db, sample_farmer):
         """Test 'none' frequency."""
         report = FarmerReport(
-            id="REP007",
+            id="R4",
             phone=sample_farmer.phone,
             report_frequency="none",
             last_sent=None
@@ -83,7 +83,7 @@ class TestReportGenerationService:
     def test_generate_reports_updates_last_sent(self, test_db, sample_farmer, sample_parcel, sample_indices):
         """Test that generate_reports updates last_sent date."""
         report = FarmerReport(
-            id="REP008",
+            id="R5",
             phone=sample_farmer.phone,
             report_frequency="daily",
             last_sent=None
