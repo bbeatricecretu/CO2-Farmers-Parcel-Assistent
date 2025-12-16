@@ -2,6 +2,7 @@ from typing import Optional, Tuple
 import re
 
 class IntentService:
+    # sets - fast membership checks
     LIST_KEYWORDS = {"parcels", "fields"}
     DETAIL_KEYWORDS = {"detail", "details", "about", "information", "info"}
     STATUS_KEYWORDS = {"how", "status", "summary", "condition", "health"}
@@ -13,21 +14,23 @@ class IntentService:
     def detect_intent(message: str) -> str:
         """Detect user intent from message text."""
         message_lower = message.lower()
-        words = set(message_lower.split())
+        words = set(message_lower.split()) 
         
-        # Check for setting report frequency (e.g., "Set my report frequency to daily")
+        # & - intersection for sets
+
+        # 4. Check for setting report frequency (e.g., "Set my report frequency to daily")
         if (words & IntentService.SET_KEYWORDS) and (words & IntentService.REPORT_KEYWORDS or "frequency" in message_lower):
             return "SET_REPORT_FREQUENCY"
         
-        # Check for parcel status/summary (e.g., "How is parcel P1?", "What's the status of P1?")
+        # 3. Check for parcel status/summary (e.g., "How is parcel P1?", "What's the status of P1?")
         if (words & IntentService.STATUS_KEYWORDS) and IntentService._contains_parcel_id(message):
             return "PARCEL_STATUS"
         
-        # Check for parcel details (e.g., "show details for parcel P1")
+        # 2. Check for parcel details (e.g., "show details for parcel P1")
         if (words & IntentService.DETAIL_KEYWORDS or "parcel" in message_lower) and IntentService._contains_parcel_id(message):
             return "PARCEL_DETAILS"
         
-        # Check for list all parcels
+        # 1. Check for list all parcels
         if words & IntentService.LIST_KEYWORDS and words & IntentService.ACTION_KEYWORDS:
             return "LIST_PARCELS"
         

@@ -6,7 +6,7 @@ app = FastAPI(title="Farmers Parcel Assistant API")
 
 @app.on_event("startup") #when fast api starts
 def startup():
-    init_db() #this one is executed
+    init_db() 
 
 app.include_router(manage.router) #takes routes defined in manage.py and mounts them to the app
 

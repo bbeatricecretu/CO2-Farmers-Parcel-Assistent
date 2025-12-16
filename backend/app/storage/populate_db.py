@@ -5,6 +5,8 @@ from app.storage.database import SessionLocal, init_db
 from app.models.base import Farmer, Parcel, ParcelIndex, FarmerReport
 import uuid
 
+#sql injection safe  
+
 def load_json_file(filepath: str):
     with open(filepath, 'r', encoding='utf-8') as f:
         return json.load(f)
@@ -22,24 +24,24 @@ def populate_database():
         db.query(Parcel).delete()
         db.query(FarmerReport).delete()
         db.query(Farmer).delete()
-        db.commit()
+        db.commit() #save changes
         print("Database cleared")
         
         print("Loading farmers...")
-        farmers_data = load_json_file('data/farmers.json')
+        farmers_data = load_json_file('../data/farmers.json')
         for farmer_data in farmers_data:
             farmer = Farmer(
-                id=farmer_data['id'],
+                id=farmer_data['id'], # must exist
                 username=farmer_data['username'],
                 name=farmer_data['name'],
-                phone=farmer_data.get('phone')
+                phone=farmer_data.get('phone') #may exist
             )
             db.add(farmer)
         db.commit()
         print(f"Loaded {len(farmers_data)} farmers")
         
         print("Loading parcels...")
-        parcels_data = load_json_file('data/parcels.json')
+        parcels_data = load_json_file('../data/parcels.json')
         for parcel_data in parcels_data:
             parcel = Parcel(
                 id=parcel_data['id'],
@@ -53,7 +55,7 @@ def populate_database():
         print(f"Loaded {len(parcels_data)} parcels")
         
         print("Loading parcel indices...")
-        indices_data = load_json_file('data/parcel_indices.json')
+        indices_data = load_json_file('../data/parcel_indices.json')
         index_count = 0
         for parcel_id, indices in indices_data.items():
             for idx, index_data in enumerate(indices):
@@ -92,7 +94,7 @@ def populate_database():
         
     except Exception as e:
         print(f"Error: {e}")
-        db.rollback()
+        db.rollback()#undoes all changes made since the last commit().
     finally:
         db.close()
 

@@ -2,6 +2,7 @@ from sqlalchemy import Column, String, Float, Date, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 
+#ORM models
 Base = declarative_base()
 
 class Farmer(Base):
@@ -48,4 +49,4 @@ class FarmerReport(Base):
     
     id = Column(String, primary_key=True)
     phone = Column(String, nullable=False, unique=True)
-    report_frequency = Column(String, nullable=False, default="weekly")  # daily, weekly, or custom (e.g., "2 days")
+    report_frequency = Column(String, nullable=False)  # daily, weekly, or custom (e.g., "2 days")

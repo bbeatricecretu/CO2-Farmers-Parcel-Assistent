@@ -41,7 +41,7 @@ class ReportGenerationService:
         if not farmer_report:
             # No preference set, use default weekly
             # For this demo, we'll say weekly reports go out (simplified logic)
-            return True
+            return False
         
         frequency = farmer_report.report_frequency.lower()
         

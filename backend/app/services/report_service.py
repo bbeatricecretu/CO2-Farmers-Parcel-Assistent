@@ -26,4 +26,4 @@ class ReportService:
         if report:
             return report.report_frequency
         
-        return "weekly"  # Default frequency
+        return "none"  # Default frequency
