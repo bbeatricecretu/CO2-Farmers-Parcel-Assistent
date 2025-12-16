@@ -1,9 +1,10 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from app.storage.database import get_db
 from app.services.chat_service import ChatService
 from app.services.farmer_service import FarmerService
 from app.services.report_generation_service import ReportGenerationService
+from app.services.trend_analysis_service import TrendAnalysisService
 from app.api.schemas import MessageRequest, MessageResponse, LinkRequest, LinkResponse, GenerateReportsResponse, ReportItem
 
 router = APIRouter(tags=["message"])
@@ -25,3 +26,21 @@ def generate_reports(db: Session = Depends(get_db)):
     report_service = ReportGenerationService(db)
     reports = report_service.generate_reports()
     return reports
+
+@router.get("/parcel/{parcel_id}/trends")
+def get_parcel_trends(parcel_id: str, db: Session = Depends(get_db)):
+    """
+    Analyze trends for a parcel's indices over time.
+    
+    - **parcel_id**: The parcel identifier
+    
+    Returns trend analysis showing if indices are increasing, decreasing, or stable.
+    Uses standard thresholds optimized for each index type.
+    """
+    trend_service = TrendAnalysisService(db)
+    trends = trend_service.analyze_parcel_trends(parcel_id)
+    
+    if trends.get("status") == "insufficient_data":
+        raise HTTPException(status_code=400, detail=trends["message"])
+    
+    return trends
