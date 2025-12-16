@@ -26,3 +26,10 @@ class ReportRepository:
         
         self.db.commit()
         return report
+    
+    def update_last_sent(self, phone: str, sent_date):
+        """Update the last_sent date for a farmer report."""
+        report = self.get_by_phone(phone)
+        if report:
+            report.last_sent = sent_date
+            self.db.commit()

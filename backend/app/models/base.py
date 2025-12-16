@@ -50,3 +50,4 @@ class FarmerReport(Base):
     id = Column(String, primary_key=True)
     phone = Column(String, nullable=False, unique=True)
     report_frequency = Column(String, nullable=False)  # daily, weekly, or custom (e.g., "2 days")
+    last_sent = Column(Date, nullable=True)  # Track when the last report was sent

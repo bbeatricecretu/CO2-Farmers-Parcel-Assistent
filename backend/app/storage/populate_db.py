@@ -28,7 +28,7 @@ def populate_database():
         print("Database cleared")
         
         print("Loading farmers...")
-        farmers_data = load_json_file('../data/farmers.json')
+        farmers_data = load_json_file('data/farmers.json')
         for farmer_data in farmers_data:
             farmer = Farmer(
                 id=farmer_data['id'], # must exist
@@ -41,7 +41,7 @@ def populate_database():
         print(f"Loaded {len(farmers_data)} farmers")
         
         print("Loading parcels...")
-        parcels_data = load_json_file('../data/parcels.json')
+        parcels_data = load_json_file('data/parcels.json')
         for parcel_data in parcels_data:
             parcel = Parcel(
                 id=parcel_data['id'],
@@ -55,7 +55,7 @@ def populate_database():
         print(f"Loaded {len(parcels_data)} parcels")
         
         print("Loading parcel indices...")
-        indices_data = load_json_file('../data/parcel_indices.json')
+        indices_data = load_json_file('data/parcel_indices.json')
         index_count = 0
         for parcel_id, indices in indices_data.items():
             for idx, index_data in enumerate(indices):
