@@ -1,5 +1,6 @@
 from typing import Optional, Tuple
 import re
+import os
 
 class IntentService:
     # sets - fast membership checks
@@ -13,6 +14,41 @@ class IntentService:
     @staticmethod
     def detect_intent(message: str) -> str:
         """Detect user intent from message text."""
+        from app.config import settings
+        
+        # Check if LLM is enabled
+        use_llm = str(settings.USE_LLM).lower() == "true"
+        
+        if use_llm:
+            api_key = settings.LLM_API_KEY
+            if api_key:
+                try:
+                    return IntentService._detect_intent_with_llm(message, api_key)
+                except Exception as e:
+                    print(f"LLM intent detection failed: {e}. Falling back to rule-based.")
+        
+        # Rule-based intent detection (fallback or default)
+        return IntentService._detect_intent_rule_based(message)
+    
+    @staticmethod
+    def _detect_intent_with_llm(message: str, api_key: str) -> str:
+        """Detect intent using LLM."""
+        from app.ai.gemini_client import GeminiClient
+        from app.ai.prompts import get_intent_classification_prompt
+        
+        client = GeminiClient(api_key)
+        prompt = get_intent_classification_prompt(message)
+        result = client.generate(prompt).strip().upper()
+        
+        # Validate result
+        valid_intents = {"LIST_PARCELS", "PARCEL_DETAILS", "PARCEL_STATUS", "SET_REPORT_FREQUENCY", "UNKNOWN"}
+        if result in valid_intents:
+            return result
+        return "UNKNOWN"
+    
+    @staticmethod
+    def _detect_intent_rule_based(message: str) -> str:
+        """Detect intent using rule-based approach."""
         message_lower = message.lower()
         words = set(message_lower.split()) 
         

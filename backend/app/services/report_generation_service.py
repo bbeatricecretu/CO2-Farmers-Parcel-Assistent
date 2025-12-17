@@ -3,7 +3,7 @@ from app.repositories.farmer_repo import FarmerRepository
 from app.repositories.parcel_repo import ParcelRepository
 from app.repositories.report_repo import ReportRepository
 from app.repositories.index_repo import IndexRepository
-from app.services.index_service import IndexInterpretationService
+from app.ai.factory import get_summary_generator
 from datetime import datetime, timedelta, date
 from typing import List, Dict
 
@@ -13,7 +13,7 @@ class ReportGenerationService:
         self.parcel_repo = ParcelRepository(db)
         self.report_repo = ReportRepository(db)
         self.index_repo = IndexRepository(db)
-        self.interpretation_service = IndexInterpretationService()
+        self.summary_generator = get_summary_generator()
     
     def generate_reports(self) -> List[Dict[str, str]]:
         """Generate reports for all farmers who should receive one today."""
@@ -78,7 +78,7 @@ class ReportGenerationService:
         if not parcels:
             return f"Your weekly parcel report: You have no parcels registered."
         
-        # Build report with simple summaries
+        # Build report with summaries (rule-based or LLM-powered)
         parcel_summaries = []
         
         for parcel in parcels:
@@ -95,27 +95,12 @@ class ReportGenerationService:
             # Get the most recent index
             latest_index = indices[-1]
             
-            # Get simple status interpretations
-            veg_status = self.interpretation_service.vegetation_status(latest_index.ndvi)
-            moisture_status = self.interpretation_service.moisture_status(latest_index.ndmi)
-            nitrogen_status = self.interpretation_service.soil_nitrogen_status(latest_index.nitrogen)
-            ph_status = self.interpretation_service.soil_ph_status(latest_index.ph)
-            
-            # Build concise status parts
-            status_parts = []
-            if veg_status:
-                status_parts.append(veg_status)
-            if moisture_status:
-                status_parts.append(moisture_status)
-            if nitrogen_status:
-                status_parts.append(nitrogen_status)
-            if ph_status:
-                status_parts.append(ph_status)
-            
-            if status_parts:
-                summary = f"Parcel {parcel.id} is stable, {', '.join(status_parts)}"
-            else:
-                summary = f"Parcel {parcel.id} is stable"
+            # Use factory-generated summary generator (rule-based or LLM)
+            indices_data = {
+                "latest_index": latest_index,
+                "parcel_name": parcel.name
+            }
+            summary = self.summary_generator.generate_parcel_summary(parcel.id, indices_data)
             
             parcel_summaries.append(summary)
         
