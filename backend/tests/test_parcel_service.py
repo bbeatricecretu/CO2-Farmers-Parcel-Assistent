@@ -24,18 +24,22 @@ class TestParcelService:
         service = ParcelService(test_db)
         formatted = service.format_parcels_list(sample_farmer)
         
-        assert sample_parcel.id in formatted
-        assert sample_parcel.crop in formatted
-        assert "ha" in formatted.lower()
+        assert isinstance(formatted, dict)
+        assert "parcels" in formatted
+        assert len(formatted["parcels"]) > 0
+        assert formatted["parcels"][0]["id"] == sample_parcel.id
+        assert formatted["parcels"][0]["crop"] == sample_parcel.crop
     
     def test_get_parcel_details(self, test_db, sample_farmer, sample_parcel, sample_indices):
         """Test getting parcel details."""
         service = ParcelService(test_db)
         details = service.get_parcel_details(sample_parcel.id, sample_farmer)
         
-        assert sample_parcel.name in details
-        assert sample_parcel.crop in details
-        assert str(sample_parcel.area_ha) in details
+        assert isinstance(details, dict)
+        assert details["parcel_id"] == sample_parcel.id
+        assert details["name"] == sample_parcel.name
+        assert details["crop"] == sample_parcel.crop
+        assert details["area_ha"] == sample_parcel.area_ha
     
     def test_get_parcel_status(self, test_db, sample_farmer, sample_parcel, sample_indices):
         """Test getting parcel status."""

@@ -18,61 +18,58 @@ class ParcelService:
         """Get parcels by farmer ID."""
         return self.parcel_repo.get_by_farmer_id(farmer_id)
     
-    def format_parcels_list(self, farmer: Farmer) -> str:
-        """Format farmer's parcels into a readable list."""
+    def format_parcels_list(self, farmer: Farmer) -> dict:
+        """Format farmer's parcels into a structured list."""
         parcels = farmer.parcels
         
-        if parcels:
-            parcel_list = "\n".join([
-                f"- {p.id}: {p.name} ({p.area_ha} ha, {p.crop})"
+        return {
+            "parcels": [
+                {
+                    "id": p.id,
+                    "name": p.name,
+                    "area": float(p.area_ha),
+                    "crop": p.crop
+                }
                 for p in parcels
-            ])
-            return f"Your parcels:\n{parcel_list}"
-        else:
-            return "You don't have any parcels registered."
+            ]
+        }
     
-    def get_parcel_details(self, parcel_id: str, farmer: Farmer) -> str:
+    def get_parcel_details(self, parcel_id: str, farmer: Farmer):
         """Get detailed information about a specific parcel including latest indices."""
         parcel = self.parcel_repo.get_by_id(parcel_id)
         
         if not parcel:
-            return f"Parcel {parcel_id} not found."
+            return {"error": f"Parcel {parcel_id} not found."}
         
         # Check if parcel belongs to the farmer
         if parcel.farmer_id != farmer.id:
-            return f"Parcel {parcel_id} does not belong to you."
+            return {"error": f"Parcel {parcel_id} does not belong to you."}
         
         # Get latest indices
         indices = sorted(parcel.indices, key=lambda x: x.date, reverse=True)
         
-        details = f"**Parcel {parcel.id}: {parcel.name}**\n\n"
-        details += f"📏 Area: {parcel.area_ha} ha\n"
-        details += f"🌾 Crop: {parcel.crop}\n"
+        details = {
+            "parcel_id": parcel.id,
+            "name": parcel.name,
+            "area_ha": float(parcel.area_ha),
+            "crop": parcel.crop,
+            "data_date": None,
+            "indices": None
+        }
         
         if indices:
             latest = indices[0]
-            details += f"\n**Latest Indices ({latest.date}):**\n"
-            details += "\n*Vegetation:*\n"
-            if latest.ndvi is not None:
-                details += f"  • NDVI: {latest.ndvi:.2f}\n"
-            if latest.ndmi is not None:
-                details += f"  • NDMI: {latest.ndmi:.2f}\n"
-            if latest.ndwi is not None:
-                details += f"  • NDWI: {latest.ndwi:.2f}\n"
-            
-            details += "\n*Soil:*\n"
-            if latest.soc is not None:
-                details += f"  • SOC: {latest.soc:.2f}\n"
-            if latest.nitrogen is not None:
-                details += f"  • Nitrogen: {latest.nitrogen:.2f}\n"
-            if latest.phosphorus is not None:
-                details += f"  • Phosphorus: {latest.phosphorus:.2f}\n"
-            if latest.potassium is not None:
-                details += f"  • Potassium: {latest.potassium:.2f}\n"
-            if latest.ph is not None:
-                details += f"  • pH: {latest.ph:.2f}\n"
-        else:
-            details += "\n⚠️ No indices data available for this parcel.\n"
+            details["data_date"] = str(latest.date)
+            details["indices"] = {
+                "ndvi": round(float(latest.ndvi), 2) if latest.ndvi is not None else None,
+                "ndmi": round(float(latest.ndmi), 2) if latest.ndmi is not None else None,
+                "ndwi": round(float(latest.ndwi), 2) if latest.ndwi is not None else None,
+                "soc": round(float(latest.soc), 2) if latest.soc is not None else None,
+                "nitrogen": round(float(latest.nitrogen), 2) if latest.nitrogen is not None else None,
+                "phosphorus": round(float(latest.phosphorus), 2) if latest.phosphorus is not None else None,
+                "potassium": round(float(latest.potassium), 2) if latest.potassium is not None else None,
+                "ph": round(float(latest.ph), 2) if latest.ph is not None else None
+            }
         
         return details
     

@@ -1,18 +1,25 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
+from typing import Union
 from app.storage.database import get_db
 from app.services.intent_service import IntentService
 from app.services.farmer_service import FarmerService
 from app.services.report_service import ReportService
 from app.services.trend_analysis_service import TrendAnalysisService
-from app.api.schemas import MessageRequest, MessageResponse, LinkRequest, LinkResponse, ReportItem
+from app.api.schemas import MessageRequest, MessageResponse, LinkRequest, LinkResponse, ReportItem, ParcelListResponse, ParcelDetailsResponse
 
 router = APIRouter(tags=["message"])
 
-@router.post("/message", response_model=MessageResponse)
+@router.post("/message", response_model=Union[MessageResponse, ParcelListResponse, ParcelDetailsResponse])
 def message(payload: MessageRequest, db: Session = Depends(get_db)):
     intent_service = IntentService(db)
     reply = intent_service.handle_message(payload.from_, payload.text)
+    
+    # If reply is a dict (structured response), return it directly
+    if isinstance(reply, dict):
+        return reply
+    
+    # Otherwise, wrap string reply in MessageResponse
     return {"reply": reply}
 
 @router.post("/link", response_model=LinkResponse)

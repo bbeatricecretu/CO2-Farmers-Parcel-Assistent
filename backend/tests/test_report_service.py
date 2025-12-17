@@ -75,9 +75,12 @@ class TestReportService:
         service = ReportService(test_db)
         report = service._generate_farmer_report(sample_farmer)
         
-        assert isinstance(report, str)
-        assert len(report) > 0
-        assert sample_parcel.id in report
+        assert isinstance(report, dict)
+        assert "to" in report
+        assert "farmer" in report
+        assert "parcels" in report
+        assert len(report["parcels"]) > 0
+        assert report["parcels"][0]["parcel_id"] == sample_parcel.id
     
     
     def test_generate_reports_updates_last_sent(self, test_db, sample_farmer, sample_parcel, sample_indices):

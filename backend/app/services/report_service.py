@@ -4,6 +4,7 @@ from app.repositories.farmer_repo import FarmerRepository
 from app.repositories.parcel_repo import ParcelRepository
 from app.repositories.index_repo import IndexRepository
 from app.ai.factory import get_summary_generator
+from app.services.index_service import IndexInterpretationService
 from datetime import date
 from typing import List, Dict
 
@@ -14,6 +15,7 @@ class ReportService:
         self.parcel_repo = ParcelRepository(db)
         self.index_repo = IndexRepository(db)
         self.summary_generator = get_summary_generator()
+        self.interpretation_service = IndexInterpretationService()
     
     def set_report_frequency(self, phone: str, frequency: str) -> str:
         """Set report frequency for a farmer."""
@@ -38,7 +40,7 @@ class ReportService:
         
         return "none"  # Default frequency
 
-    def generate_reports(self) -> List[Dict[str, str]]:
+    def generate_reports(self) -> List[Dict]:
         """Generate reports for all farmers who should receive one today."""
         reports = []
         
@@ -49,11 +51,8 @@ class ReportService:
         for farmer in linked_farmers:
             # Check if farmer should receive report today
             if self._should_receive_report_today(farmer.phone):
-                message = self._generate_farmer_report(farmer)
-                reports.append({
-                    "to": farmer.phone,
-                    "message": message
-                })
+                report = self._generate_farmer_report(farmer)
+                reports.append(report)
                 # Update last_sent date
                 self.report_repo.update_last_sent(farmer.phone, date.today())
         
@@ -94,22 +93,30 @@ class ReportService:
         
         return False
     
-    def _generate_farmer_report(self, farmer) -> str:
+    def _generate_farmer_report(self, farmer) -> Dict:
         """Generate a comprehensive report for a farmer about all their parcels."""
         parcels = self.parcel_repo.get_by_farmer_id(farmer.id)
         
+        # Get report frequency to determine report type
+        frequency = self.get_report_frequency(farmer.phone)
+        
+        report_data = {
+            "to": farmer.phone,
+            "farmer": farmer.name,
+            "report_type": frequency,
+            "generated_at": date.today().strftime('%Y-%m-%d'),
+            "parcels": []
+        }
+        
         if not parcels:
-            return f"Your weekly parcel report: You have no parcels registered."
+            return report_data
         
         # Build report with summaries (rule-based or LLM-powered)
-        parcel_summaries = []
-        
         for parcel in parcels:
             # Get latest indices for this parcel
             indices = self.index_repo.get_by_parcel_id(parcel.id)
             
             if not indices:
-                parcel_summaries.append(f"Parcel {parcel.id}: no data available yet")
                 continue
             
             # Sort indices by date to ensure we get the latest one
@@ -127,7 +134,53 @@ class ReportService:
             }
             summary = self.summary_generator.generate_parcel_summary(parcel.id, indices_data)
             
-            parcel_summaries.append(summary)
+            # Build structured parcel data
+            def safe_round(value, decimals=2):
+                return round(float(value), decimals) if value is not None else 0.0
+            
+            parcel_data = {
+                "parcel_id": parcel.id,
+                "name": parcel.name,
+                "area_ha": float(parcel.area_ha),
+                "crop": parcel.crop,
+                "data_date": str(latest_index.date),
+                "indices": {
+                    "ndvi": {
+                        "value": safe_round(latest_index.ndvi),
+                        "status": self.interpretation_service.vegetation_status(latest_index.ndvi) if latest_index.ndvi else "unknown"
+                    },
+                    "ndmi": {
+                        "value": safe_round(latest_index.ndmi),
+                        "status": self.interpretation_service.moisture_status(latest_index.ndmi) if latest_index.ndmi else "unknown"
+                    },
+                    "ndwi": {
+                        "value": safe_round(latest_index.ndwi),
+                        "status": "moderate_water"
+                    },
+                    "soc": {
+                        "value": safe_round(latest_index.soc),
+                        "status": "moderate"
+                    },
+                    "n": {
+                        "value": safe_round(latest_index.nitrogen),
+                        "status": self.interpretation_service.soil_nitrogen_status(latest_index.nitrogen) if latest_index.nitrogen else "unknown"
+                    },
+                    "p": {
+                        "value": safe_round(latest_index.phosphorus),
+                        "status": "moderate"
+                    },
+                    "k": {
+                        "value": safe_round(latest_index.potassium),
+                        "status": "moderate"
+                    },
+                    "ph": {
+                        "value": safe_round(latest_index.ph),
+                        "status": self.interpretation_service.soil_ph_status(latest_index.ph) if latest_index.ph else "unknown"
+                    }
+                },
+                "summary": summary
+            }
+            
+            report_data["parcels"].append(parcel_data)
         
-        # Create final message
-        return f"Your weekly parcel report: {'. '.join(parcel_summaries)}."
+        return report_data

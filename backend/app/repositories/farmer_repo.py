@@ -27,4 +27,3 @@ class FarmerRepository:
     def refresh_session(self):
         """Expire all cached instances to ensure fresh data from database."""
         self.db.expire_all()
- 

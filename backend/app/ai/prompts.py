@@ -8,13 +8,13 @@ def get_intent_classification_prompt(user_message: str) -> str:
         User message: "{user_message}"
 
         Available intents:
-        1. LIST_PARCELS - User wants to see all their parcels (e.g., "show my parcels", "what parcels do I have?", "list fields")
-        2. PARCEL_DETAILS - User wants details about a specific parcel (e.g., "tell me about parcel P1", "details of North Field", "info about P1")
+        1. LIST_PARCELS - User wants to see all their parcels (e.g., "show my parcels", "what parcels do I have?", "List parcels")
+        2. PARCEL_DETAILS - User wants details about a specific parcel (e.g., "tell me about parcel P1", "Tell me about parcel P1", "info about P1", "show details for P2")
         3. PARCEL_STATUS - User wants current status/health of a parcel (e.g., "how is P1 doing?", "is my field healthy?", "status of P1", "summary of P1")
         4. SET_REPORT_FREQUENCY - User wants to change how often they receive reports (e.g., "send reports weekly", "I want daily updates")
         5. UNKNOWN - Cannot determine clear intent
 
-        Respond with ONLY the intent name (e.g., "LIST_PARCELS"). Do not include any explanation."""
+        Respond with ONLY the intent name(if are more choose one) (e.g., "LIST_PARCELS"). Do not include any explanation."""
 
 
 def get_parcel_summary_prompt(
