@@ -90,7 +90,8 @@ class LLMSummaryGenerator:
             "vegetation": self.interpretation_service.vegetation_status(latest_index.ndvi),
             "moisture": self.interpretation_service.moisture_status(latest_index.ndmi),
             "nitrogen": self.interpretation_service.soil_nitrogen_status(latest_index.nitrogen),
-            "ph": self.interpretation_service.soil_ph_status(latest_index.ph)
+            "ph": self.interpretation_service.soil_ph_status(latest_index.ph),
+            "date": str(latest_index.date)
         }
         
         # Use engineered prompt

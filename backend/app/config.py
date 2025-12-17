@@ -13,7 +13,7 @@ class Settings(BaseSettings):
     USE_LLM: str = "false"
     LLM_PROVIDER: str = "gemini"
     LLM_API_KEY: Optional[str] = None
-    LLM_MODEL: str = "gemini-1.5-flash"  # Default model, can be overridden in .env (e.g., gemma-2-9b-it)
+    LLM_MODEL: str = "gemini-2.5-flash-lite"  # Default model, can be overridden in .env (e.g., gemma-2-9b-it)
     
     model_config = SettingsConfigDict(
         env_file=".env",

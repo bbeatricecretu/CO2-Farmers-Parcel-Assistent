@@ -23,72 +23,76 @@ def get_parcel_summary_prompt(
     indices: dict,
     interpretations: dict,
 ) -> str:
+    """
+    indices: raw numeric values (ndvi, ndmi, ndwi, nitrogen, ph, soc, etc.)
+    interpretations: may contain metadata like 'date'
+    """
+
     facts = []
 
-    # Extract date safely (expected to be passed in indices)
-    last_date = indices.get("date", "an unknown date")
-
     if indices.get("ndvi") is not None:
-        facts.append(
-            f"NDVI is approximately {indices['ndvi']:.2f}, "
-            f"which indicates {interpretations.get('vegetation', 'an unclear vegetation condition')}."
-        )
+        facts.append(f"NDVI value: {indices['ndvi']:.2f}")
 
     if indices.get("ndmi") is not None:
-        facts.append(
-            f"NDMI is around {indices['ndmi']:.2f}, "
-            f"suggesting {interpretations.get('moisture', 'uncertain soil moisture conditions')}."
-        )
+        facts.append(f"NDMI value: {indices['ndmi']:.2f}")
 
-    if indices.get("ph") is not None:
-        facts.append(
-            f"Soil pH is close to {indices['ph']:.1f}, "
-            f"described as {interpretations.get('ph', 'not clearly classified')}."
-        )
+    if indices.get("ndwi") is not None:
+        facts.append(f"NDWI value: {indices['ndwi']:.2f}")
 
     if indices.get("nitrogen") is not None:
-        facts.append(
-            f"Nitrogen levels are considered {interpretations.get('nitrogen', 'unknown')}."
-        )
+        facts.append(f"Nitrogen index: {indices['nitrogen']:.2f}")
+
+    if indices.get("ph") is not None:
+        facts.append(f"Soil pH: {indices['ph']:.2f}")
 
     if indices.get("soc") is not None:
-        facts.append(
-            f"Soil organic carbon levels appear {interpretations.get('soc', 'unknown')}."
-        )
+        facts.append(f"Soil organic carbon: {indices['soc']:.2f}")
+
+    last_date = interpretations.get("date", "an unknown date")
+    facts.append(f"Measurement date: {last_date}")
 
     facts_text = "\n".join(f"- {fact}" for fact in facts)
 
     return f"""
-You are an agricultural assistant generating a parcel STATUS SUMMARY for a farmer.
+You are an agricultural monitoring assistant.
+
+Your task is to summarize parcel conditions based ONLY on the measured data below.
 
 OUTPUT STRUCTURE (must follow):
 
-1. Title line (neutral, factual):
-Parcel {parcel_id} – {parcel_name} current status:
+1. Title line (neutral):
+   Parcel {parcel_id} – {parcel_name} current status:
 
 2. Bullet list:
-• 3–6 bullet points
-• Each bullet describes one important observation
-• You may paraphrase freely
-• Use simple, farmer-friendly language
-• Mention values when relevant
+   • 3–6 bullet points
+   • Each bullet interprets ONE measurement
+   • You may infer conditions (e.g., low, moderate, high)
+   • Use simple, farmer-friendly language
+   • Do NOT give advice or recommendations
 
 3. Final line:
-A short neutral conclusion that explicitly mentions the measurement date ({last_date}).
+   A neutral conclusion referencing the measurement date ({last_date}).
 
 IMPORTANT RULES:
-- Keep the structure exactly (title → bullets → final line)
-- Do NOT copy the input text verbatim
-- Do NOT invent data or recommendations
-- Do NOT assume good or bad conditions
-- Use your own wording while staying factual
+- Do NOT invent measurements
+- Do NOT give actions or recommendations
+- Do NOT assume good or bad overall performance
+- Interpretation must be cautious and data-driven
+- Wording should be natural, not copied from input
+- include measurement values in bullets
+- rephrase each bullet in a unique way
 
-FACTS AND INTERPRETATIONS:
+MEASURED DATA:
 {facts_text}
+
+REFERENCE GUIDANCE (do not repeat verbatim):
+- NDVI roughly reflects vegetation density (low < 0.3, moderate ~0.3–0.6, high > 0.6)
+- NDMI relates to moisture availability
+- NDWI reflects surface water presence
+- Soil pH around 6–7 is typical for many crops
 
 OUTPUT:
 """
-
 
 
 
