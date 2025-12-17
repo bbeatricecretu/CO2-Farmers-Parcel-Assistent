@@ -1,5 +1,4 @@
-from pydantic_settings import BaseSettings
-import os
+from pydantic_settings import BaseSettings, SettingsConfigDict
 from pathlib import Path
 from typing import Optional
 
@@ -16,9 +15,10 @@ class Settings(BaseSettings):
     LLM_API_KEY: Optional[str] = None
     LLM_MODEL: str = "gemini-1.5-flash"  # Default model, can be overridden in .env (e.g., gemma-2-9b-it)
     
-    class Config:
-        env_file = ".env" #load variables from file .env
-        case_sensitive = False  # Allow case-insensitive env vars
-        extra = "ignore"  # Ignore extra fields in .env
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        case_sensitive=False,
+        extra="ignore"
+    )
 
 settings = Settings() 

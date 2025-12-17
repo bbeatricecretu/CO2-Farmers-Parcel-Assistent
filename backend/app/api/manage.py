@@ -5,7 +5,7 @@ from app.services.intent_service import IntentService
 from app.services.farmer_service import FarmerService
 from app.services.report_service import ReportService
 from app.services.trend_analysis_service import TrendAnalysisService
-from app.api.schemas import MessageRequest, MessageResponse, LinkRequest, LinkResponse, GenerateReportsResponse, ReportItem
+from app.api.schemas import MessageRequest, MessageResponse, LinkRequest, LinkResponse, ReportItem
 
 router = APIRouter(tags=["message"])
 

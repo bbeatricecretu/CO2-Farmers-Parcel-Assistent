@@ -1,18 +1,6 @@
 """Summary generation strategies for parcel reports."""
-from typing import Protocol
 from app.services.index_service import IndexInterpretationService
 from app.ai.prompts import get_parcel_summary_prompt
-
-
-class SummaryGenerator(Protocol):
-    """Protocol for summary generation strategies."""
-    
-    # A Protocol defines a contract
-    # Any summary generator must have a generate_parcel_summary(...) method.
-    def generate_parcel_summary(self, parcel_id: str, indices_data: dict) -> str:
-        """Generate a summary for a parcel based on its index data."""
-        ...
-
 
 class RuleBasedSummaryGenerator:
     """Generate summaries using rule-based interpretation."""

@@ -1,13 +1,6 @@
 """Trend summary generation strategies."""
-from typing import Protocol, Dict
+from typing import Dict
 from app.ai.prompts import get_trend_analysis_summary_prompt
-
-class TrendSummarizer(Protocol):
-    """Protocol for trend summary generation strategies."""
-    
-    def generate_trend_summary(self, parcel_id: str, parcel_name: str, trends_data: Dict) -> str:
-        """Generate a summary of the trend analysis."""
-        ...
 
 class RuleBasedTrendSummarizer:
     """Generate trend summaries using rule-based templates."""

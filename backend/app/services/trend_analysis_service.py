@@ -2,7 +2,7 @@ from sqlalchemy.orm import Session
 from app.repositories.index_repo import IndexRepository
 from app.repositories.parcel_repo import ParcelRepository
 from app.ai.factory import get_trend_summarizer
-from typing import Dict, Optional
+from typing import Dict
 
 class TrendAnalysisService:
     """Service for analyzing trends in parcel indices over time."""

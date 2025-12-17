@@ -1,14 +1,6 @@
 """Intent classification strategies."""
-from typing import Protocol
 from app.ai.prompts import get_intent_classification_prompt
 import re
-
-class IntentClassifier(Protocol):
-    """Protocol for intent classification strategies."""
-    
-    def classify(self, message: str) -> str:
-        """Classify the intent of a user message."""
-        ...
 
 class RuleBasedIntentClassifier:
     """Classify intent using keyword matching rules."""

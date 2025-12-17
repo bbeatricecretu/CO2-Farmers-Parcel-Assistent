@@ -4,7 +4,7 @@ from app.repositories.farmer_repo import FarmerRepository
 from app.repositories.parcel_repo import ParcelRepository
 from app.repositories.index_repo import IndexRepository
 from app.ai.factory import get_summary_generator
-from datetime import datetime, timedelta, date
+from datetime import date
 from typing import List, Dict
 
 class ReportService:

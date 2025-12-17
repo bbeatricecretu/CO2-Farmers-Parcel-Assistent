@@ -22,6 +22,3 @@ class LinkResponse(BaseModel):
 class ReportItem(BaseModel):
     to: str
     message: str
-
-class GenerateReportsResponse(BaseModel):
-    reports: list[ReportItem]

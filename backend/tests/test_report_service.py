@@ -1,9 +1,9 @@
 import pytest
 from datetime import date, timedelta
-from app.services.report_generation_service import ReportGenerationService
+from app.services.report_service import ReportService
 from app.models.base import FarmerReport
 
-class TestReportGenerationService:
+class TestReportService:
     
     def test_should_receive_report_daily(self, test_db, sample_farmer):
         """Test daily report frequency."""
@@ -16,7 +16,7 @@ class TestReportGenerationService:
         test_db.add(report)
         test_db.commit()
         
-        service = ReportGenerationService(test_db)
+        service = ReportService(test_db)
         should_receive = service._should_receive_report_today(sample_farmer.phone)
         
         assert should_receive is True
@@ -32,7 +32,7 @@ class TestReportGenerationService:
         test_db.add(report)
         test_db.commit()
         
-        service = ReportGenerationService(test_db)
+        service = ReportService(test_db)
         should_receive = service._should_receive_report_today(sample_farmer.phone)
         
         assert should_receive is True
@@ -49,7 +49,7 @@ class TestReportGenerationService:
         test_db.add(report)
         test_db.commit()
         
-        service = ReportGenerationService(test_db)
+        service = ReportService(test_db)
         should_receive = service._should_receive_report_today(sample_farmer.phone)
         
         assert should_receive is True
@@ -65,14 +65,14 @@ class TestReportGenerationService:
         test_db.add(report)
         test_db.commit()
         
-        service = ReportGenerationService(test_db)
+        service = ReportService(test_db)
         should_receive = service._should_receive_report_today(sample_farmer.phone)
         
         assert should_receive is False
     
     def test_generate_farmer_report_with_data(self, test_db, sample_farmer, sample_parcel, sample_indices):
         """Test generating report for farmer with parcel data."""
-        service = ReportGenerationService(test_db)
+        service = ReportService(test_db)
         report = service._generate_farmer_report(sample_farmer)
         
         assert isinstance(report, str)
@@ -91,7 +91,7 @@ class TestReportGenerationService:
         test_db.add(report)
         test_db.commit()
         
-        service = ReportGenerationService(test_db)
+        service = ReportService(test_db)
         reports = service.generate_reports()
         
         # Verify last_sent was updated

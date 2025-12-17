@@ -1,4 +1,9 @@
 """LLM client for Google Gemini API."""
+import warnings
+
+# Suppress Google Generative AI deprecation warning
+warnings.filterwarnings("ignore", message="All support for the `google.generativeai` package has ended", category=FutureWarning)
+
 import google.generativeai as genai
 
 

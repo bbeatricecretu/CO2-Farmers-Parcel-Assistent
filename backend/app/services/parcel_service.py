@@ -1,9 +1,8 @@
 from sqlalchemy.orm import Session
-from app.models.base import Farmer, Parcel
+from app.models.base import Farmer
 from app.repositories.parcel_repo import ParcelRepository
 from app.services.index_service import IndexInterpretationService
 from app.ai.factory import get_summary_generator
-from app.ai.summaries import LLMSummaryGenerator
 
 class ParcelService:
     def __init__(self, db: Session):

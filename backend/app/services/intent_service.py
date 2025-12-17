@@ -71,10 +71,7 @@ class IntentService:
         classifier = get_intent_classifier()
         return classifier.classify(message)
     
-    @staticmethod
-    def _contains_parcel_id(message: str) -> bool:
-        """Check if message contains a parcel ID pattern."""
-        return bool(re.search(r'\bP\d+\b', message, re.IGNORECASE))
+
     
     @staticmethod
     def extract_parcel_id(message: str) -> Optional[str]:
