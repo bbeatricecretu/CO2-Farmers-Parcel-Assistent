@@ -17,58 +17,80 @@ def get_intent_classification_prompt(user_message: str) -> str:
         Respond with ONLY the intent name (e.g., "LIST_PARCELS"). Do not include any explanation."""
 
 
-def get_parcel_summary_prompt(parcel_id: str, parcel_name: str, indices: dict, interpretations: dict) -> str:
-    # Build index information string
-    index_info = []
-    
+def get_parcel_summary_prompt(
+    parcel_id: str,
+    parcel_name: str,
+    indices: dict,
+    interpretations: dict,
+) -> str:
+    facts = []
+
+    # Extract date safely (expected to be passed in indices)
+    last_date = indices.get("date", "an unknown date")
+
     if indices.get("ndvi") is not None:
-        status = interpretations.get("vegetation", "")
-        index_info.append(f"- Vegetation (NDVI: {indices['ndvi']:.2f}): {status}")
-    
+        facts.append(
+            f"NDVI is approximately {indices['ndvi']:.2f}, "
+            f"which indicates {interpretations.get('vegetation', 'an unclear vegetation condition')}."
+        )
+
     if indices.get("ndmi") is not None:
-        status = interpretations.get("moisture", "")
-        index_info.append(f"- Moisture (NDMI: {indices['ndmi']:.2f}): {status}")
-    
-    if indices.get("ndwi") is not None:
-        status = interpretations.get("water", "")
-        index_info.append(f"- Water Content (NDWI: {indices['ndwi']:.2f}): {status}")
-    
-    if indices.get("nitrogen") is not None:
-        status = interpretations.get("nitrogen", "")
-        index_info.append(f"- Nitrogen: {indices['nitrogen']:.2f} - {status}")
-    
-    if indices.get("phosphorus") is not None:
-        status = interpretations.get("phosphorus", "")
-        index_info.append(f"- Phosphorus: {indices['phosphorus']:.2f} - {status}")
-    
-    if indices.get("potassium") is not None:
-        status = interpretations.get("potassium", "")
-        index_info.append(f"- Potassium: {indices['potassium']:.2f} - {status}")
-    
+        facts.append(
+            f"NDMI is around {indices['ndmi']:.2f}, "
+            f"suggesting {interpretations.get('moisture', 'uncertain soil moisture conditions')}."
+        )
+
     if indices.get("ph") is not None:
-        status = interpretations.get("ph", "")
-        index_info.append(f"- pH Level: {indices['ph']:.2f} - {status}")
-    
+        facts.append(
+            f"Soil pH is close to {indices['ph']:.1f}, "
+            f"described as {interpretations.get('ph', 'not clearly classified')}."
+        )
+
+    if indices.get("nitrogen") is not None:
+        facts.append(
+            f"Nitrogen levels are considered {interpretations.get('nitrogen', 'unknown')}."
+        )
+
     if indices.get("soc") is not None:
-        status = interpretations.get("soc", "")
-        index_info.append(f"- Soil Organic Carbon: {indices['soc']:.2f} - {status}")
-    
-    indices_text = "\n".join(index_info) if index_info else "No data available"
-    
-    return f"""You are an agricultural assistant creating a friendly, conversational summary for a farmer.
-        Parcel: {parcel_name} ({parcel_id})
-        Current Measurements and Status:
-        {indices_text}
+        facts.append(
+            f"Soil organic carbon levels appear {interpretations.get('soc', 'unknown')}."
+        )
 
-        Create a brief (3-4 sentences) natural language summary for the farmer. 
-        - Be conversational and friendly
-        - Highlight the most important information
-        - Mention any concerns or positive aspects
-        - Use simple language, avoid technical jargon
-        - Do not make specific recommendations, just describe the current state
+    facts_text = "\n".join(f"- {fact}" for fact in facts)
 
-        Example style: "Your North Field is looking healthy! The crops have good vegetation density (ndvi is ...) and adequate moisture levels. Soil nutrients are well-balanced with good nitrogen and pH levels."
-        Summary:"""
+    return f"""
+You are an agricultural assistant generating a parcel STATUS SUMMARY for a farmer.
+
+OUTPUT STRUCTURE (must follow):
+
+1. Title line (neutral, factual):
+Parcel {parcel_id} – {parcel_name} current status:
+
+2. Bullet list:
+• 3–6 bullet points
+• Each bullet describes one important observation
+• You may paraphrase freely
+• Use simple, farmer-friendly language
+• Mention values when relevant
+
+3. Final line:
+A short neutral conclusion that explicitly mentions the measurement date ({last_date}).
+
+IMPORTANT RULES:
+- Keep the structure exactly (title → bullets → final line)
+- Do NOT copy the input text verbatim
+- Do NOT invent data or recommendations
+- Do NOT assume good or bad conditions
+- Use your own wording while staying factual
+
+FACTS AND INTERPRETATIONS:
+{facts_text}
+
+OUTPUT:
+"""
+
+
+
 
 
 def get_trend_analysis_summary_prompt(parcel_id: str, parcel_name: str, trends: dict) -> str:
