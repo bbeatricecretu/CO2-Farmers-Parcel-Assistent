@@ -1,0 +1,989 @@
+{
+	"info": {
+		"_postman_id": "25e838e9-533c-4d5d-b62b-1d93a65f9fd1",
+		"name": "CO2-Farmers-Parcel-Assistent",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "43785051",
+		"_collection_link": "https://cretubeatrice.postman.co/workspace/Cretu-Beatrice's-Workspace~a05d91d7-96f3-4a5c-8fd9-f261d76a115c/collection/43785051-25e838e9-533c-4d5d-b62b-1d93a65f9fd1?action=share&source=collection_link&creator=43785051"
+	},
+	"item": [
+		{
+			"name": "Message",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": [
+				{
+					"name": "List all parcels - Without AI",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"from\": \"+40741111111\",\r\n  \"text\": \"Show me my parcels\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/message\n",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"message\n"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "date",
+							"value": "Wed, 17 Dec 2025 21:24:40 GMT"
+						},
+						{
+							"key": "server",
+							"value": "uvicorn"
+						},
+						{
+							"key": "content-length",
+							"value": "318"
+						},
+						{
+							"key": "content-type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"parcels\": [\n        {\n            \"id\": \"P1\",\n            \"name\": \"North Field\",\n            \"area\": 12.3,\n            \"crop\": \"Wheat\"\n        },\n        {\n            \"id\": \"P2\",\n            \"name\": \"South Slope\",\n            \"area\": 8.7,\n            \"crop\": \"Maize\"\n        },\n        {\n            \"id\": \"P3\",\n            \"name\": \"East Meadow\",\n            \"area\": 5.5,\n            \"crop\": \"Alfalfa\"\n        },\n        {\n            \"id\": \"P4\",\n            \"name\": \"West Terrace\",\n            \"area\": 10,\n            \"crop\": \"Sunflower\"\n        },\n        {\n            \"id\": \"P5\",\n            \"name\": \"River Plot\",\n            \"area\": 6.1,\n            \"crop\": \"Soybean\"\n        }\n    ]\n}"
+				},
+				{
+					"name": "List all parcels - AI (misspelling)",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"from\": \"+40741111111\",\r\n  \"text\": \"List all parcls\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/message\n",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"message\n"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "date",
+							"value": "Wed, 17 Dec 2025 22:07:01 GMT"
+						},
+						{
+							"key": "server",
+							"value": "uvicorn"
+						},
+						{
+							"key": "content-length",
+							"value": "318"
+						},
+						{
+							"key": "content-type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"parcels\": [\n        {\n            \"id\": \"P1\",\n            \"name\": \"North Field\",\n            \"area\": 12.3,\n            \"crop\": \"Wheat\"\n        },\n        {\n            \"id\": \"P2\",\n            \"name\": \"South Slope\",\n            \"area\": 8.7,\n            \"crop\": \"Maize\"\n        },\n        {\n            \"id\": \"P3\",\n            \"name\": \"East Meadow\",\n            \"area\": 5.5,\n            \"crop\": \"Alfalfa\"\n        },\n        {\n            \"id\": \"P4\",\n            \"name\": \"West Terrace\",\n            \"area\": 10,\n            \"crop\": \"Sunflower\"\n        },\n        {\n            \"id\": \"P5\",\n            \"name\": \"River Plot\",\n            \"area\": 6.1,\n            \"crop\": \"Soybean\"\n        }\n    ]\n}"
+				},
+				{
+					"name": "Details parcel - Without AI",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"from\": \"+40741111111\",\r\n  \"text\": \"Show details for parcel P1\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/message\n",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"message\n"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "date",
+							"value": "Wed, 17 Dec 2025 21:27:11 GMT"
+						},
+						{
+							"key": "server",
+							"value": "uvicorn"
+						},
+						{
+							"key": "content-length",
+							"value": "211"
+						},
+						{
+							"key": "content-type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"parcel_id\": \"P1\",\n    \"name\": \"North Field\",\n    \"area_ha\": 12.3,\n    \"crop\": \"Wheat\",\n    \"data_date\": \"2025-05-15\",\n    \"indices\": {\n        \"ndvi\": 0.68,\n        \"ndmi\": 0.32,\n        \"ndwi\": 0.25,\n        \"soc\": 1.7,\n        \"nitrogen\": 0.7,\n        \"phosphorus\": 0.32,\n        \"potassium\": 0.58,\n        \"ph\": 6.4\n    }\n}"
+				},
+				{
+					"name": "Details parcel AI",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"from\": \"+40741111111\",\r\n  \"text\": \"P5?\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/message\n",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"message\n"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "date",
+							"value": "Wed, 17 Dec 2025 22:17:15 GMT"
+						},
+						{
+							"key": "server",
+							"value": "uvicorn"
+						},
+						{
+							"key": "content-length",
+							"value": "209"
+						},
+						{
+							"key": "content-type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"parcel_id\": \"P5\",\n    \"name\": \"River Plot\",\n    \"area_ha\": 6.1,\n    \"crop\": \"Soybean\",\n    \"data_date\": \"2025-05-08\",\n    \"indices\": {\n        \"ndvi\": 0.58,\n        \"ndmi\": 0.3,\n        \"ndwi\": 0.2,\n        \"soc\": 1.9,\n        \"nitrogen\": 0.8,\n        \"phosphorus\": 0.37,\n        \"potassium\": 0.64,\n        \"ph\": 6.6\n    }\n}"
+				},
+				{
+					"name": "Status summary - Without AI",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"from\": \"+40741111111\",\r\n  \"text\": \"Give me a summary for P1\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/message\n",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"message\n"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "date",
+							"value": "Wed, 17 Dec 2025 22:20:11 GMT"
+						},
+						{
+							"key": "server",
+							"value": "uvicorn"
+						},
+						{
+							"key": "content-length",
+							"value": "614"
+						},
+						{
+							"key": "content-type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"reply\": \"**Status Summary for Parcel P1: North Field**\\n(12.3 ha, Wheat)\\nData from: 2025-05-15\\n\\n🌱 **Vegetation (NDVI: 0.68):** Vegetation is healthy and dense.\\n\\n💧 **Moisture (NDMI: 0.32):** High moisture - healthy water content.\\n\\n💦 **Water (NDWI: 0.25):** Moderate water content.\\n\\n🌾 **Soil Organic Carbon (SOC: 1.70):** Moderate soil organic content.\\n\\n🧪 **Nitrogen (N: 0.70):** Adequate nitrogen levels.\\n\\n🧪 **Phosphorus (P: 0.32):** Low phosphorus levels.\\n\\n🧪 **Potassium (K: 0.58):** Adequate potassium levels.\\n\\n⚗️ **pH Level (6.40):** Good pH - ideal for most crops.\\n\"\n}"
+				},
+				{
+					"name": "Status summary - AI",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"from\": \"+40741111111\",\r\n  \"text\": \"How is parcel P1?\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/message\n",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"message\n"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "date",
+							"value": "Wed, 17 Dec 2025 22:09:08 GMT"
+						},
+						{
+							"key": "server",
+							"value": "uvicorn"
+						},
+						{
+							"key": "content-length",
+							"value": "550"
+						},
+						{
+							"key": "content-type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"reply\": \"Parcel P1 – North Field current status:\\n\\n*   The vegetation is looking quite dense with an NDVI of 0.68.\\n*   There appears to be a moderate amount of moisture available in the vegetation, indicated by an NDMI of 0.32.\\n*   Surface water is present at a low level, with an NDWI reading of 0.25.\\n*   The nitrogen levels are showing as relatively high, at 0.70.\\n*   The soil pH is around 6.40, which is within a suitable range for many crops.\\n*   Soil organic carbon content is at 1.70.\\n\\nThe parcel was last measured on 2025-05-15.\"\n}"
+				},
+				{
+					"name": "Status summary - AI 2",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"from\": \"+40741111111\",\r\n  \"text\": \"How P2?\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/message\n",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"message\n"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "date",
+							"value": "Wed, 17 Dec 2025 22:16:21 GMT"
+						},
+						{
+							"key": "server",
+							"value": "uvicorn"
+						},
+						{
+							"key": "content-length",
+							"value": "603"
+						},
+						{
+							"key": "content-type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"reply\": \"Parcel P2 – South Slope current status:\\n\\n• The Normalized Difference Vegetation Index (NDVI) is 0.50, indicating a moderate level of vegetation cover.\\n• The Normalized Difference Water Index (NDWI) registers at 0.19, suggesting some surface water presence.\\n• The nitrogen index is 0.60, which points to a moderate availability of nitrogen in the soil.\\n• The soil pH measures 6.20, falling within the typical range for many agricultural crops.\\n• Soil organic carbon content is 1.50%, representing a moderate level of organic matter.\\n\\nMeasurements were taken on 2025-05-10.\"\n}"
+				},
+				{
+					"name": "Raport- Without AI",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"from\": \"+40742222222\",\r\n  \"text\": \"Set my report frequency to daily\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/message\n",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"message\n"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "date",
+							"value": "Wed, 17 Dec 2025 21:15:34 GMT"
+						},
+						{
+							"key": "server",
+							"value": "uvicorn"
+						},
+						{
+							"key": "content-length",
+							"value": "103"
+						},
+						{
+							"key": "content-type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"reply\": \"Your report frequency has been set to daily. You will receive parcel summaries every daily.\"\n}"
+				},
+				{
+					"name": "Raport - AI",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"from\": \"+40741111111\",\r\n  \"text\": \"weekly?\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/message\n",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"message\n"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "date",
+							"value": "Wed, 17 Dec 2025 22:18:14 GMT"
+						},
+						{
+							"key": "server",
+							"value": "uvicorn"
+						},
+						{
+							"key": "content-length",
+							"value": "105"
+						},
+						{
+							"key": "content-type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"reply\": \"Your report frequency has been set to weekly. You will receive parcel summaries every weekly.\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Link",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": [
+				{
+					"name": "Used phone",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"phone\": \"+40741111111\",\r\n  \"username\": \"maria.stan\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/link",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"link"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "date",
+							"value": "Wed, 17 Dec 2025 22:21:11 GMT"
+						},
+						{
+							"key": "server",
+							"value": "uvicorn"
+						},
+						{
+							"key": "content-length",
+							"value": "73"
+						},
+						{
+							"key": "content-type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"reply\": \"This phone number is already linked to account 'ana.popescu'.\"\n}"
+				},
+				{
+					"name": "Already linked",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"phone\": \"+40123\",\r\n  \"username\": \"ion.ionescu\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/link",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"link"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "date",
+							"value": "Wed, 17 Dec 2025 22:21:50 GMT"
+						},
+						{
+							"key": "server",
+							"value": "uvicorn"
+						},
+						{
+							"key": "content-length",
+							"value": "87"
+						},
+						{
+							"key": "content-type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"reply\": \"This account is already linked. Please try again with a different username.\"\n}"
+				},
+				{
+					"name": "Invalid username",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"phone\": \"+40123\",\r\n  \"username\": \"abc.abc\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/link",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"link"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "date",
+							"value": "Wed, 17 Dec 2025 22:22:12 GMT"
+						},
+						{
+							"key": "server",
+							"value": "uvicorn"
+						},
+						{
+							"key": "content-length",
+							"value": "71"
+						},
+						{
+							"key": "content-type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"reply\": \"Username not found. Please try again with a valid username.\"\n}"
+				},
+				{
+					"name": "Linked successfully",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"phone\": \"+40123\",\r\n  \"username\": \"maria.stan\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/link",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"link"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "date",
+							"value": "Wed, 17 Dec 2025 22:22:39 GMT"
+						},
+						{
+							"key": "server",
+							"value": "uvicorn"
+						},
+						{
+							"key": "content-length",
+							"value": "94"
+						},
+						{
+							"key": "content-type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"reply\": \"Great, your account has been linked to +40123. You can now ask about your parcels.\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Generate reports",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": [
+				{
+					"name": "Without AI",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8000/generate-reports\n",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"generate-reports\n"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "date",
+							"value": "Wed, 17 Dec 2025 21:16:51 GMT"
+						},
+						{
+							"key": "server",
+							"value": "uvicorn"
+						},
+						{
+							"key": "content-length",
+							"value": "6569"
+						},
+						{
+							"key": "content-type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "[\n    {\n        \"to\": \"+40741111111\",\n        \"farmer\": \"Ana Popescu\",\n        \"report_type\": \"daily\",\n        \"generated_at\": \"2025-12-17\",\n        \"parcels\": [\n            {\n                \"parcel_id\": \"P1\",\n                \"name\": \"North Field\",\n                \"area_ha\": 12.3,\n                \"crop\": \"Wheat\",\n                \"data_date\": \"2025-05-15\",\n                \"indices\": {\n                    \"ndvi\": {\n                        \"value\": 0.68,\n                        \"status\": \"vegetation is healthy\"\n                    },\n                    \"ndmi\": {\n                        \"value\": 0.32,\n                        \"status\": \"moisture is high\"\n                    },\n                    \"ndwi\": {\n                        \"value\": 0.25,\n                        \"status\": \"moderate_water\"\n                    },\n                    \"soc\": {\n                        \"value\": 1.7,\n                        \"status\": \"moderate\"\n                    },\n                    \"n\": {\n                        \"value\": 0.7,\n                        \"status\": \"nitrogen is adequate\"\n                    },\n                    \"p\": {\n                        \"value\": 0.32,\n                        \"status\": \"moderate\"\n                    },\n                    \"k\": {\n                        \"value\": 0.58,\n                        \"status\": \"moderate\"\n                    },\n                    \"ph\": {\n                        \"value\": 6.4,\n                        \"status\": \"pH is neutral\"\n                    }\n                },\n                \"summary\": \"**Status Summary for Parcel P1: North Field**\\n(12.3 ha, Wheat)\\nData from: 2025-05-15\\n\\n🌱 **Vegetation (NDVI: 0.68):** Vegetation is healthy and dense.\\n\\n💧 **Moisture (NDMI: 0.32):** High moisture - healthy water content.\\n\\n💦 **Water (NDWI: 0.25):** Moderate water content.\\n\\n🌾 **Soil Organic Carbon (SOC: 1.70):** Moderate soil organic content.\\n\\n🧪 **Nitrogen (N: 0.70):** Adequate nitrogen levels.\\n\\n🧪 **Phosphorus (P: 0.32):** Low phosphorus levels.\\n\\n🧪 **Potassium (K: 0.58):** Adequate potassium levels.\\n\\n⚗️ **pH Level (6.40):** Good pH - ideal for most crops.\\n\"\n            },\n            {\n                \"parcel_id\": \"P2\",\n                \"name\": \"South Slope\",\n                \"area_ha\": 8.7,\n                \"crop\": \"Maize\",\n                \"data_date\": \"2025-05-10\",\n                \"indices\": {\n                    \"ndvi\": {\n                        \"value\": 0.5,\n                        \"status\": \"vegetation is moderate\"\n                    },\n                    \"ndmi\": {\n                        \"value\": 0,\n                        \"status\": \"unknown\"\n                    },\n                    \"ndwi\": {\n                        \"value\": 0.19,\n                        \"status\": \"moderate_water\"\n                    },\n                    \"soc\": {\n                        \"value\": 1.5,\n                        \"status\": \"moderate\"\n                    },\n                    \"n\": {\n                        \"value\": 0.6,\n                        \"status\": \"nitrogen is low\"\n                    },\n                    \"p\": {\n                        \"value\": 0.29,\n                        \"status\": \"moderate\"\n                    },\n                    \"k\": {\n                        \"value\": 0.5,\n                        \"status\": \"moderate\"\n                    },\n                    \"ph\": {\n                        \"value\": 6.2,\n                        \"status\": \"pH is neutral\"\n                    }\n                },\n                \"summary\": \"**Status Summary for Parcel P2: South Slope**\\n(8.7 ha, Maize)\\nData from: 2025-05-10\\n\\n🌱 **Vegetation (NDVI: 0.50):** Vegetation is developing with moderate health.\\n\\n💦 **Water (NDWI: 0.19):** Moderate water content.\\n\\n🌾 **Soil Organic Carbon (SOC: 1.50):** Moderate soil organic content.\\n\\n🧪 **Nitrogen (N: 0.60):** Low nitrogen - crop may need fertilization.\\n\\n🧪 **Phosphorus (P: 0.29):** Low phosphorus levels.\\n\\n🧪 **Potassium (K: 0.50):** Low potassium levels.\\n\\n⚗️ **pH Level (6.20):** Good pH - ideal for most crops.\\n\"\n            },\n            {\n                \"parcel_id\": \"P3\",\n                \"name\": \"East Meadow\",\n                \"area_ha\": 5.5,\n                \"crop\": \"Alfalfa\",\n                \"data_date\": \"2025-04-25\",\n                \"indices\": {\n                    \"ndvi\": {\n                        \"value\": 0,\n                        \"status\": \"unknown\"\n                    },\n                    \"ndmi\": {\n                        \"value\": 0.27,\n                        \"status\": \"moisture is moderate\"\n                    },\n                    \"ndwi\": {\n                        \"value\": 0.21,\n                        \"status\": \"moderate_water\"\n                    },\n                    \"soc\": {\n                        \"value\": 2.1,\n                        \"status\": \"moderate\"\n                    },\n                    \"n\": {\n                        \"value\": 0.95,\n                        \"status\": \"nitrogen is adequate\"\n                    },\n                    \"p\": {\n                        \"value\": 0.4,\n                        \"status\": \"moderate\"\n                    },\n                    \"k\": {\n                        \"value\": 0.69,\n                        \"status\": \"moderate\"\n                    },\n                    \"ph\": {\n                        \"value\": 6.8,\n                        \"status\": \"pH is neutral\"\n                    }\n                },\n                \"summary\": \"**Status Summary for Parcel P3: East Meadow**\\n(5.5 ha, Alfalfa)\\nData from: 2025-04-25\\n\\n💧 **Moisture (NDMI: 0.27):** Moderate moisture levels.\\n\\n💦 **Water (NDWI: 0.21):** Moderate water content.\\n\\n🌾 **Soil Organic Carbon (SOC: 2.10):** Moderate soil organic content.\\n\\n🧪 **Nitrogen (N: 0.95):** Adequate nitrogen levels.\\n\\n🧪 **Phosphorus (P: 0.40):** Adequate phosphorus levels.\\n\\n🧪 **Potassium (K: 0.69):** Adequate potassium levels.\\n\\n⚗️ **pH Level (6.80):** Good pH - ideal for most crops.\\n\"\n            },\n            {\n                \"parcel_id\": \"P4\",\n                \"name\": \"West Terrace\",\n                \"area_ha\": 10,\n                \"crop\": \"Sunflower\",\n                \"data_date\": \"2025-04-20\",\n                \"indices\": {\n                    \"ndvi\": {\n                        \"value\": 0.52,\n                        \"status\": \"vegetation is moderate\"\n                    },\n                    \"ndmi\": {\n                        \"value\": 0.26,\n                        \"status\": \"moisture is moderate\"\n                    },\n                    \"ndwi\": {\n                        \"value\": 0,\n                        \"status\": \"moderate_water\"\n                    },\n                    \"soc\": {\n                        \"value\": 1.6,\n                        \"status\": \"moderate\"\n                    },\n                    \"n\": {\n                        \"value\": 0.68,\n                        \"status\": \"nitrogen is low\"\n                    },\n                    \"p\": {\n                        \"value\": 0.32,\n                        \"status\": \"moderate\"\n                    },\n                    \"k\": {\n                        \"value\": 0.54,\n                        \"status\": \"moderate\"\n                    },\n                    \"ph\": {\n                        \"value\": 6.1,\n                        \"status\": \"pH is neutral\"\n                    }\n                },\n                \"summary\": \"**Status Summary for Parcel P4: West Terrace**\\n(10.0 ha, Sunflower)\\nData from: 2025-04-20\\n\\n🌱 **Vegetation (NDVI: 0.52):** Vegetation is developing with moderate health.\\n\\n💧 **Moisture (NDMI: 0.26):** Moderate moisture levels.\\n\\n🌾 **Soil Organic Carbon (SOC: 1.60):** Moderate soil organic content.\\n\\n🧪 **Nitrogen (N: 0.68):** Low nitrogen - crop may need fertilization.\\n\\n🧪 **Phosphorus (P: 0.32):** Low phosphorus levels.\\n\\n🧪 **Potassium (K: 0.54):** Low potassium levels.\\n\\n⚗️ **pH Level (6.10):** Good pH - ideal for most crops.\\n\"\n            },\n            {\n                \"parcel_id\": \"P5\",\n                \"name\": \"River Plot\",\n                \"area_ha\": 6.1,\n                \"crop\": \"Soybean\",\n                \"data_date\": \"2025-05-08\",\n                \"indices\": {\n                    \"ndvi\": {\n                        \"value\": 0.58,\n                        \"status\": \"vegetation is healthy\"\n                    },\n                    \"ndmi\": {\n                        \"value\": 0.3,\n                        \"status\": \"moisture is moderate\"\n                    },\n                    \"ndwi\": {\n                        \"value\": 0.2,\n                        \"status\": \"moderate_water\"\n                    },\n                    \"soc\": {\n                        \"value\": 1.9,\n                        \"status\": \"moderate\"\n                    },\n                    \"n\": {\n                        \"value\": 0.8,\n                        \"status\": \"nitrogen is adequate\"\n                    },\n                    \"p\": {\n                        \"value\": 0.37,\n                        \"status\": \"moderate\"\n                    },\n                    \"k\": {\n                        \"value\": 0.64,\n                        \"status\": \"moderate\"\n                    },\n                    \"ph\": {\n                        \"value\": 6.6,\n                        \"status\": \"pH is neutral\"\n                    }\n                },\n                \"summary\": \"**Status Summary for Parcel P5: River Plot**\\n(6.1 ha, Soybean)\\nData from: 2025-05-08\\n\\n🌱 **Vegetation (NDVI: 0.58):** Vegetation is healthy and dense.\\n\\n💧 **Moisture (NDMI: 0.30):** Moderate moisture levels.\\n\\n💦 **Water (NDWI: 0.20):** Moderate water content.\\n\\n🌾 **Soil Organic Carbon (SOC: 1.90):** Moderate soil organic content.\\n\\n🧪 **Nitrogen (N: 0.80):** Adequate nitrogen levels.\\n\\n🧪 **Phosphorus (P: 0.37):** Adequate phosphorus levels.\\n\\n🧪 **Potassium (K: 0.64):** Adequate potassium levels.\\n\\n⚗️ **pH Level (6.60):** Good pH - ideal for most crops.\\n\"\n            }\n        ]\n    },\n    {\n        \"to\": \"+40742222222\",\n        \"farmer\": \"Ion Ionescu\",\n        \"report_type\": \"daily\",\n        \"generated_at\": \"2025-12-17\",\n        \"parcels\": [\n            {\n                \"parcel_id\": \"P6\",\n                \"name\": \"Hill Top\",\n                \"area_ha\": 4.2,\n                \"crop\": \"Barley\",\n                \"data_date\": \"2025-04-18\",\n                \"indices\": {\n                    \"ndvi\": {\n                        \"value\": 0.46,\n                        \"status\": \"vegetation is moderate\"\n                    },\n                    \"ndmi\": {\n                        \"value\": 0.21,\n                        \"status\": \"moisture is moderate\"\n                    },\n                    \"ndwi\": {\n                        \"value\": 0.17,\n                        \"status\": \"moderate_water\"\n                    },\n                    \"soc\": {\n                        \"value\": 1.4,\n                        \"status\": \"moderate\"\n                    },\n                    \"n\": {\n                        \"value\": 0.6,\n                        \"status\": \"nitrogen is low\"\n                    },\n                    \"p\": {\n                        \"value\": 0.28,\n                        \"status\": \"moderate\"\n                    },\n                    \"k\": {\n                        \"value\": 0.49,\n                        \"status\": \"moderate\"\n                    },\n                    \"ph\": {\n                        \"value\": 6,\n                        \"status\": \"pH is neutral\"\n                    }\n                },\n                \"summary\": \"**Status Summary for Parcel P6: Hill Top**\\n(4.2 ha, Barley)\\nData from: 2025-04-18\\n\\n🌱 **Vegetation (NDVI: 0.46):** Vegetation is developing with moderate health.\\n\\n💧 **Moisture (NDMI: 0.21):** Moderate moisture levels.\\n\\n💦 **Water (NDWI: 0.17):** Moderate water content.\\n\\n🌾 **Soil Organic Carbon (SOC: 1.40):** Low soil organic matter - poor soil quality.\\n\\n🧪 **Nitrogen (N: 0.60):** Low nitrogen - crop may need fertilization.\\n\\n🧪 **Phosphorus (P: 0.28):** Low phosphorus levels.\\n\\n🧪 **Potassium (K: 0.49):** Low potassium levels.\\n\\n⚗️ **pH Level (6.00):** Good pH - ideal for most crops.\\n\"\n            }\n        ]\n    }\n]"
+				},
+				{
+					"name": "With AI",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8000/generate-reports\n",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"generate-reports\n"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "date",
+							"value": "Wed, 17 Dec 2025 22:11:40 GMT"
+						},
+						{
+							"key": "server",
+							"value": "uvicorn"
+						},
+						{
+							"key": "content-length",
+							"value": "6757"
+						},
+						{
+							"key": "content-type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "[\n    {\n        \"to\": \"+40741111111\",\n        \"farmer\": \"Ana Popescu\",\n        \"report_type\": \"daily\",\n        \"generated_at\": \"2025-12-18\",\n        \"parcels\": [\n            {\n                \"parcel_id\": \"P1\",\n                \"name\": \"North Field\",\n                \"area_ha\": 12.3,\n                \"crop\": \"Wheat\",\n                \"data_date\": \"2025-05-15\",\n                \"indices\": {\n                    \"ndvi\": {\n                        \"value\": 0.68,\n                        \"status\": \"vegetation is healthy\"\n                    },\n                    \"ndmi\": {\n                        \"value\": 0.32,\n                        \"status\": \"moisture is high\"\n                    },\n                    \"ndwi\": {\n                        \"value\": 0.25,\n                        \"status\": \"moderate_water\"\n                    },\n                    \"soc\": {\n                        \"value\": 1.7,\n                        \"status\": \"moderate\"\n                    },\n                    \"n\": {\n                        \"value\": 0.7,\n                        \"status\": \"nitrogen is adequate\"\n                    },\n                    \"p\": {\n                        \"value\": 0.32,\n                        \"status\": \"moderate\"\n                    },\n                    \"k\": {\n                        \"value\": 0.58,\n                        \"status\": \"moderate\"\n                    },\n                    \"ph\": {\n                        \"value\": 6.4,\n                        \"status\": \"pH is neutral\"\n                    }\n                },\n                \"summary\": \"Parcel P1 – North Field current status:\\n\\n*   The vegetation appears to be quite dense, with an NDVI of 0.68.\\n*   There is a moderate amount of moisture available in the vegetation, indicated by an NDMI of 0.32.\\n*   Surface water presence is low, with an NDWI reading of 0.25.\\n*   The nitrogen content in the parcel is at a high level, shown by a nitrogen index of 0.70.\\n*   The soil pH is measured at 6.40, which is within a typical range for many crops.\\n*   The soil organic carbon content is 1.70.\\n\\nAll measurements were taken on 2025-05-15.\"\n            },\n            {\n                \"parcel_id\": \"P2\",\n                \"name\": \"South Slope\",\n                \"area_ha\": 8.7,\n                \"crop\": \"Maize\",\n                \"data_date\": \"2025-05-10\",\n                \"indices\": {\n                    \"ndvi\": {\n                        \"value\": 0.5,\n                        \"status\": \"vegetation is moderate\"\n                    },\n                    \"ndmi\": {\n                        \"value\": 0,\n                        \"status\": \"unknown\"\n                    },\n                    \"ndwi\": {\n                        \"value\": 0.19,\n                        \"status\": \"moderate_water\"\n                    },\n                    \"soc\": {\n                        \"value\": 1.5,\n                        \"status\": \"moderate\"\n                    },\n                    \"n\": {\n                        \"value\": 0.6,\n                        \"status\": \"nitrogen is low\"\n                    },\n                    \"p\": {\n                        \"value\": 0.29,\n                        \"status\": \"moderate\"\n                    },\n                    \"k\": {\n                        \"value\": 0.5,\n                        \"status\": \"moderate\"\n                    },\n                    \"ph\": {\n                        \"value\": 6.2,\n                        \"status\": \"pH is neutral\"\n                    }\n                },\n                \"summary\": \"Parcel P2 – South Slope current status:\\n\\n*   The Normalized Difference Vegetation Index (NDVI) is 0.50, indicating moderate vegetation cover.\\n*   With an NDWI value of 0.19, there is some surface water present, but not an excessive amount.\\n*   The nitrogen index stands at 0.60, suggesting a good level of available nitrogen.\\n*   Soil pH is measured at 6.20, which is within a typical range for many crops.\\n*   Soil organic carbon content is at 1.50, representing a moderate level.\\n\\nMeasurements taken on 2025-05-10.\"\n            },\n            {\n                \"parcel_id\": \"P3\",\n                \"name\": \"East Meadow\",\n                \"area_ha\": 5.5,\n                \"crop\": \"Alfalfa\",\n                \"data_date\": \"2025-04-25\",\n                \"indices\": {\n                    \"ndvi\": {\n                        \"value\": 0,\n                        \"status\": \"unknown\"\n                    },\n                    \"ndmi\": {\n                        \"value\": 0.27,\n                        \"status\": \"moisture is moderate\"\n                    },\n                    \"ndwi\": {\n                        \"value\": 0.21,\n                        \"status\": \"moderate_water\"\n                    },\n                    \"soc\": {\n                        \"value\": 2.1,\n                        \"status\": \"moderate\"\n                    },\n                    \"n\": {\n                        \"value\": 0.95,\n                        \"status\": \"nitrogen is adequate\"\n                    },\n                    \"p\": {\n                        \"value\": 0.4,\n                        \"status\": \"moderate\"\n                    },\n                    \"k\": {\n                        \"value\": 0.69,\n                        \"status\": \"moderate\"\n                    },\n                    \"ph\": {\n                        \"value\": 6.8,\n                        \"status\": \"pH is neutral\"\n                    }\n                },\n                \"summary\": \"Parcel P3 – East Meadow current status:\\n\\n• The Normalized Difference Moisture Index (NDMI) of 0.27 indicates a low level of available moisture in the vegetation.\\n• The Normalized Difference Water Index (NDWI) is 0.21, suggesting limited presence of surface water.\\n• The Nitrogen index registers at 0.95, which is a high reading for this indicator.\\n• Soil pH is measured at 6.80, a value generally considered suitable for many crops.\\n• Soil organic carbon content is at 2.10 percent, representing a moderate level.\\n\\nConditions are based on data collected on 2025-04-25.\"\n            },\n            {\n                \"parcel_id\": \"P4\",\n                \"name\": \"West Terrace\",\n                \"area_ha\": 10,\n                \"crop\": \"Sunflower\",\n                \"data_date\": \"2025-04-20\",\n                \"indices\": {\n                    \"ndvi\": {\n                        \"value\": 0.52,\n                        \"status\": \"vegetation is moderate\"\n                    },\n                    \"ndmi\": {\n                        \"value\": 0.26,\n                        \"status\": \"moisture is moderate\"\n                    },\n                    \"ndwi\": {\n                        \"value\": 0,\n                        \"status\": \"moderate_water\"\n                    },\n                    \"soc\": {\n                        \"value\": 1.6,\n                        \"status\": \"moderate\"\n                    },\n                    \"n\": {\n                        \"value\": 0.68,\n                        \"status\": \"nitrogen is low\"\n                    },\n                    \"p\": {\n                        \"value\": 0.32,\n                        \"status\": \"moderate\"\n                    },\n                    \"k\": {\n                        \"value\": 0.54,\n                        \"status\": \"moderate\"\n                    },\n                    \"ph\": {\n                        \"value\": 6.1,\n                        \"status\": \"pH is neutral\"\n                    }\n                },\n                \"summary\": \"Parcel P4 – West Terrace current status:\\n\\n*   The greenness of the vegetation across the parcel is measured at a moderate level, with an NDVI of 0.52.\\n*   The amount of water available to the vegetation appears to be on the lower side, indicated by an NDMI of 0.26.\\n*   The vegetation's access to nitrogen is estimated to be at a good level, with a Nitrogen index of 0.68.\\n*   The soil's acidity is slightly acidic, registering a pH of 6.10.\\n*   The organic matter content in the soil is at a low level, with a soil organic carbon reading of 1.60%.\\n\\nObservations are based on data from 2025-04-20.\"\n            },\n            {\n                \"parcel_id\": \"P5\",\n                \"name\": \"River Plot\",\n                \"area_ha\": 6.1,\n                \"crop\": \"Soybean\",\n                \"data_date\": \"2025-05-08\",\n                \"indices\": {\n                    \"ndvi\": {\n                        \"value\": 0.58,\n                        \"status\": \"vegetation is healthy\"\n                    },\n                    \"ndmi\": {\n                        \"value\": 0.3,\n                        \"status\": \"moisture is moderate\"\n                    },\n                    \"ndwi\": {\n                        \"value\": 0.2,\n                        \"status\": \"moderate_water\"\n                    },\n                    \"soc\": {\n                        \"value\": 1.9,\n                        \"status\": \"moderate\"\n                    },\n                    \"n\": {\n                        \"value\": 0.8,\n                        \"status\": \"nitrogen is adequate\"\n                    },\n                    \"p\": {\n                        \"value\": 0.37,\n                        \"status\": \"moderate\"\n                    },\n                    \"k\": {\n                        \"value\": 0.64,\n                        \"status\": \"moderate\"\n                    },\n                    \"ph\": {\n                        \"value\": 6.6,\n                        \"status\": \"pH is neutral\"\n                    }\n                },\n                \"summary\": \"Parcel P5 – River Plot current status:\\n\\n*   The vegetation health, indicated by the NDVI, is at a moderate level, measuring 0.58.\\n*   The NDMI reading of 0.30 suggests a moderate amount of moisture is available in the vegetation.\\n*   Surface water presence is low, as shown by the NDWI value of 0.20.\\n*   The Nitrogen index is high at 0.80, indicating a good supply of nitrogen.\\n*   Soil pH is at 6.60, which is within a typical range for many crops.\\n*   Soil organic carbon content is 1.90, reflecting a moderate level of organic matter.\\n\\nConditions as of 2025-05-08.\"\n            }\n        ]\n    },\n    {\n        \"to\": \"+40742222222\",\n        \"farmer\": \"Ion Ionescu\",\n        \"report_type\": \"daily\",\n        \"generated_at\": \"2025-12-18\",\n        \"parcels\": [\n            {\n                \"parcel_id\": \"P6\",\n                \"name\": \"Hill Top\",\n                \"area_ha\": 4.2,\n                \"crop\": \"Barley\",\n                \"data_date\": \"2025-04-18\",\n                \"indices\": {\n                    \"ndvi\": {\n                        \"value\": 0.46,\n                        \"status\": \"vegetation is moderate\"\n                    },\n                    \"ndmi\": {\n                        \"value\": 0.21,\n                        \"status\": \"moisture is moderate\"\n                    },\n                    \"ndwi\": {\n                        \"value\": 0.17,\n                        \"status\": \"moderate_water\"\n                    },\n                    \"soc\": {\n                        \"value\": 1.4,\n                        \"status\": \"moderate\"\n                    },\n                    \"n\": {\n                        \"value\": 0.6,\n                        \"status\": \"nitrogen is low\"\n                    },\n                    \"p\": {\n                        \"value\": 0.28,\n                        \"status\": \"moderate\"\n                    },\n                    \"k\": {\n                        \"value\": 0.49,\n                        \"status\": \"moderate\"\n                    },\n                    \"ph\": {\n                        \"value\": 6,\n                        \"status\": \"pH is neutral\"\n                    }\n                },\n                \"summary\": \"Parcel P6 – Hill Top current status:\\n\\n*   The vegetation greenness index, NDVI, is 0.46, suggesting a moderate level of plant cover.\\n*   The NDMI, indicating moisture in vegetation, is 0.21, which points to a moderate availability of water within the plants.\\n*   Surface water presence, measured by NDWI, is 0.17, implying there is a low amount of water visible on the surface.\\n*   The nitrogen index is at 0.60, reflecting a moderate level of nitrogen availability for the plants.\\n*   Soil pH is measured at 6.00, which is slightly acidic and within a typical range for many crops.\\n*   Soil organic carbon content is 1.40, indicating a moderate level of organic matter in the soil.\\n\\nOverall conditions as of 2025-04-18 show a mix of moderate and low indicators based on the collected data.\"\n            }\n        ]\n    }\n]"
+				}
+			]
+		},
+		{
+			"name": "Trends analysis",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": [
+				{
+					"name": "Without AI",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/parcel/P1/trends\n",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"parcel",
+								"P1",
+								"trends\n"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "date",
+							"value": "Wed, 17 Dec 2025 20:46:26 GMT"
+						},
+						{
+							"key": "server",
+							"value": "uvicorn"
+						},
+						{
+							"key": "content-length",
+							"value": "2093"
+						},
+						{
+							"key": "content-type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"period\": {\n        \"start_date\": \"2025-04-01\",\n        \"end_date\": \"2025-05-15\",\n        \"data_points\": 4\n    },\n    \"trends\": {\n        \"ndvi\": {\n            \"trend\": \"increasing\",\n            \"first_value\": 0.42,\n            \"last_value\": 0.68,\n            \"change\": 0.26,\n            \"interpretation\": \"vegetation is improving\",\n            \"recommendation\": \"Vegetation density and health are improving, indicating stronger crop canopy development.\"\n        },\n        \"ndmi\": {\n            \"trend\": \"increasing\",\n            \"first_value\": 0.2,\n            \"last_value\": 0.32,\n            \"change\": 0.12,\n            \"interpretation\": \"moisture is increasing\",\n            \"recommendation\": \"Moisture content in vegetation is rising, suggesting better water availability in plant tissues.\"\n        },\n        \"ndwi\": {\n            \"trend\": \"increasing\",\n            \"first_value\": 0.15,\n            \"last_value\": 0.25,\n            \"change\": 0.1,\n            \"interpretation\": \"water content is increasing\",\n            \"recommendation\": \"Water presence is increasing, showing improved water availability in the soil and crops.\"\n        },\n        \"soc\": {\n            \"trend\": \"stable\",\n            \"first_value\": 1.7,\n            \"last_value\": 1.7,\n            \"change\": 0,\n            \"interpretation\": \"soil organic carbon is stable\",\n            \"recommendation\": \"Soil organic carbon remains constant, indicating balanced organic matter dynamics.\"\n        },\n        \"nitrogen\": {\n            \"trend\": \"decreasing\",\n            \"first_value\": 0.8,\n            \"last_value\": 0.7,\n            \"change\": -0.1,\n            \"interpretation\": \"nitrogen is decreasing - potential nutrient depletion\",\n            \"recommendation\": \"Nitrogen levels are dropping, indicating nutrient uptake by crops or nutrient loss from the soil.\"\n        },\n        \"phosphorus\": {\n            \"trend\": \"stable\",\n            \"first_value\": 0.35,\n            \"last_value\": 0.32,\n            \"change\": -0.03,\n            \"interpretation\": \"phosphorus is stable\",\n            \"recommendation\": \"Phosphorus levels remain steady with balanced nutrient dynamics.\"\n        },\n        \"potassium\": {\n            \"trend\": \"stable\",\n            \"first_value\": 0.6,\n            \"last_value\": 0.58,\n            \"change\": -0.02,\n            \"interpretation\": \"potassium is stable\",\n            \"recommendation\": \"Potassium remains at consistent levels with stable nutrient status.\"\n        },\n        \"ph\": {\n            \"trend\": \"stable\",\n            \"first_value\": 6.4,\n            \"last_value\": 6.4,\n            \"change\": 0,\n            \"interpretation\": \"pH is stable\",\n            \"recommendation\": \"Soil pH remains constant with no significant changes in acidity or alkalinity.\"\n        }\n    },\n    \"summary\": \"Trend Analysis for North Field: NDVI: increasing, NDMI: increasing, NDWI: increasing, SOC: stable, NITROGEN: decreasing, PHOSPHORUS: stable, POTASSIUM: stable, PH: stable\"\n}"
+				},
+				{
+					"name": "With AI",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/parcel/P1/trends\n",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"parcel",
+								"P1",
+								"trends\n"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "date",
+							"value": "Wed, 17 Dec 2025 22:12:45 GMT"
+						},
+						{
+							"key": "server",
+							"value": "uvicorn"
+						},
+						{
+							"key": "content-length",
+							"value": "2246"
+						},
+						{
+							"key": "content-type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"period\": {\n        \"start_date\": \"2025-04-01\",\n        \"end_date\": \"2025-05-15\",\n        \"data_points\": 4\n    },\n    \"trends\": {\n        \"ndvi\": {\n            \"trend\": \"increasing\",\n            \"first_value\": 0.42,\n            \"last_value\": 0.68,\n            \"change\": 0.26,\n            \"interpretation\": \"vegetation is improving\",\n            \"recommendation\": \"Vegetation density and health are improving, indicating stronger crop canopy development.\"\n        },\n        \"ndmi\": {\n            \"trend\": \"increasing\",\n            \"first_value\": 0.2,\n            \"last_value\": 0.32,\n            \"change\": 0.12,\n            \"interpretation\": \"moisture is increasing\",\n            \"recommendation\": \"Moisture content in vegetation is rising, suggesting better water availability in plant tissues.\"\n        },\n        \"ndwi\": {\n            \"trend\": \"increasing\",\n            \"first_value\": 0.15,\n            \"last_value\": 0.25,\n            \"change\": 0.1,\n            \"interpretation\": \"water content is increasing\",\n            \"recommendation\": \"Water presence is increasing, showing improved water availability in the soil and crops.\"\n        },\n        \"soc\": {\n            \"trend\": \"stable\",\n            \"first_value\": 1.7,\n            \"last_value\": 1.7,\n            \"change\": 0,\n            \"interpretation\": \"soil organic carbon is stable\",\n            \"recommendation\": \"Soil organic carbon remains constant, indicating balanced organic matter dynamics.\"\n        },\n        \"nitrogen\": {\n            \"trend\": \"decreasing\",\n            \"first_value\": 0.8,\n            \"last_value\": 0.7,\n            \"change\": -0.1,\n            \"interpretation\": \"nitrogen is decreasing - potential nutrient depletion\",\n            \"recommendation\": \"Nitrogen levels are dropping, indicating nutrient uptake by crops or nutrient loss from the soil.\"\n        },\n        \"phosphorus\": {\n            \"trend\": \"stable\",\n            \"first_value\": 0.35,\n            \"last_value\": 0.32,\n            \"change\": -0.03,\n            \"interpretation\": \"phosphorus is stable\",\n            \"recommendation\": \"Phosphorus levels remain steady with balanced nutrient dynamics.\"\n        },\n        \"potassium\": {\n            \"trend\": \"stable\",\n            \"first_value\": 0.6,\n            \"last_value\": 0.58,\n            \"change\": -0.02,\n            \"interpretation\": \"potassium is stable\",\n            \"recommendation\": \"Potassium remains at consistent levels with stable nutrient status.\"\n        },\n        \"ph\": {\n            \"trend\": \"stable\",\n            \"first_value\": 6.4,\n            \"last_value\": 6.4,\n            \"change\": 0,\n            \"interpretation\": \"pH is stable\",\n            \"recommendation\": \"Soil pH remains constant with no significant changes in acidity or alkalinity.\"\n        }\n    },\n    \"summary\": \"Hey there! Looking at your North Field, it's great to see the vegetation is really thriving, looking greener and healthier with plenty of moisture available for your crops. While most soil nutrients are staying stable, we're seeing a slight dip in nitrogen, which is often normal as your healthy crops are busy using it up!\"\n}"
+				},
+				{
+					"name": "With AI 2",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/parcel/P2/trends\n",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"parcel",
+								"P2",
+								"trends\n"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "date",
+							"value": "Wed, 17 Dec 2025 22:14:21 GMT"
+						},
+						{
+							"key": "server",
+							"value": "uvicorn"
+						},
+						{
+							"key": "content-length",
+							"value": "2057"
+						},
+						{
+							"key": "content-type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"period\": {\n        \"start_date\": \"2025-04-10\",\n        \"end_date\": \"2025-05-10\",\n        \"data_points\": 2\n    },\n    \"trends\": {\n        \"ndvi\": {\n            \"trend\": \"increasing\",\n            \"first_value\": 0.35,\n            \"last_value\": 0.5,\n            \"change\": 0.15,\n            \"interpretation\": \"vegetation is improving\",\n            \"recommendation\": \"Vegetation density and health are improving, indicating stronger crop canopy development.\"\n        },\n        \"ndwi\": {\n            \"trend\": \"increasing\",\n            \"first_value\": 0.12,\n            \"last_value\": 0.19,\n            \"change\": 0.07,\n            \"interpretation\": \"water content is increasing\",\n            \"recommendation\": \"Water presence is increasing, showing improved water availability in the soil and crops.\"\n        },\n        \"soc\": {\n            \"trend\": \"stable\",\n            \"first_value\": 1.5,\n            \"last_value\": 1.5,\n            \"change\": 0,\n            \"interpretation\": \"soil organic carbon is stable\",\n            \"recommendation\": \"Soil organic carbon remains constant, indicating balanced organic matter dynamics.\"\n        },\n        \"nitrogen\": {\n            \"trend\": \"decreasing\",\n            \"first_value\": 0.65,\n            \"last_value\": 0.6,\n            \"change\": -0.05,\n            \"interpretation\": \"nitrogen is decreasing - potential nutrient depletion\",\n            \"recommendation\": \"Nitrogen levels are dropping, indicating nutrient uptake by crops or nutrient loss from the soil.\"\n        },\n        \"phosphorus\": {\n            \"trend\": \"stable\",\n            \"first_value\": 0.3,\n            \"last_value\": 0.29,\n            \"change\": -0.01,\n            \"interpretation\": \"phosphorus is stable\",\n            \"recommendation\": \"Phosphorus levels remain steady with balanced nutrient dynamics.\"\n        },\n        \"potassium\": {\n            \"trend\": \"stable\",\n            \"first_value\": 0.5,\n            \"last_value\": 0.5,\n            \"change\": 0,\n            \"interpretation\": \"potassium is stable\",\n            \"recommendation\": \"Potassium remains at consistent levels with stable nutrient status.\"\n        },\n        \"ph\": {\n            \"trend\": \"stable\",\n            \"first_value\": 6.2,\n            \"last_value\": 6.2,\n            \"change\": 0,\n            \"interpretation\": \"pH is stable\",\n            \"recommendation\": \"Soil pH remains constant with no significant changes in acidity or alkalinity.\"\n        }\n    },\n    \"summary\": \"Hey there! Looking at your South Slope parcel (P2), things are looking really promising! Your crops are showing great improvement in density and health, and it's fantastic that water availability is also on the upswing. While your soil's organic matter and other key nutrients are staying nice and steady, it's worth keeping an eye on nitrogen as your crops are using it up.\"\n}"
+				}
+			]
+		}
+	]
+}
