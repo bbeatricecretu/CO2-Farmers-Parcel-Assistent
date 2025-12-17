@@ -22,32 +22,50 @@ class RuleBasedSummaryGenerator:
     
     def generate_parcel_summary(self, parcel_id: str, indices_data: dict) -> str:
         """Generate a rule-based summary."""
-        latest_index = indices_data.get("latest_index")
+        latest = indices_data.get("latest_index")
+        parcel_name = indices_data.get("parcel_name", parcel_id)
+        area = indices_data.get("area_ha", "?")
+        crop = indices_data.get("crop", "Unknown")
         
-        if not latest_index:
+        if not latest:
             return f"Parcel {parcel_id}: no data available yet"
+            
+        # Generate status summary
+        summary = f"**Status Summary for Parcel {parcel_id}: {parcel_name}**\n"
+        summary += f"({area} ha, {crop})\n"
+        summary += f"Data from: {latest.date}\n\n"
         
-        # Get simple status interpretations
-        veg_status = self.interpretation_service.vegetation_status(latest_index.ndvi)
-        moisture_status = self.interpretation_service.moisture_status(latest_index.ndmi)
-        nitrogen_status = self.interpretation_service.soil_nitrogen_status(latest_index.nitrogen)
-        ph_status = self.interpretation_service.soil_ph_status(latest_index.ph)
+        # Vegetation status
+        if latest.ndvi is not None:
+            summary += f"🌱 **Vegetation (NDVI: {latest.ndvi:.2f}):** {self.interpretation_service.ndvi_status(latest.ndvi)}\n\n"
         
-        # Build concise status parts
-        status_parts = []
-        if veg_status:
-            status_parts.append(veg_status)
-        if moisture_status:
-            status_parts.append(moisture_status)
-        if nitrogen_status:
-            status_parts.append(nitrogen_status)
-        if ph_status:
-            status_parts.append(ph_status)
+        # Moisture status
+        if latest.ndmi is not None:
+            summary += f"💧 **Moisture (NDMI: {latest.ndmi:.2f}):** {self.interpretation_service.ndmi_status(latest.ndmi)}\n\n"
         
-        if status_parts:
-            summary = f"Parcel {parcel_id} is stable, {', '.join(status_parts)}"
-        else:
-            summary = f"Parcel {parcel_id} is stable"
+        # Water status
+        if latest.ndwi is not None:
+            summary += f"💦 **Water (NDWI: {latest.ndwi:.2f}):** {self.interpretation_service.ndwi_status(latest.ndwi)}\n\n"
+        
+        # Soil organic carbon
+        if latest.soc is not None:
+            summary += f"🌾 **Soil Organic Carbon (SOC: {latest.soc:.2f}):** {self.interpretation_service.soc_status(latest.soc)}\n\n"
+        
+        # Nitrogen
+        if latest.nitrogen is not None:
+            summary += f"🧪 **Nitrogen (N: {latest.nitrogen:.2f}):** {self.interpretation_service.nitrogen_status(latest.nitrogen)}\n\n"
+        
+        # Phosphorus
+        if latest.phosphorus is not None:
+            summary += f"🧪 **Phosphorus (P: {latest.phosphorus:.2f}):** {self.interpretation_service.phosphorus_status(latest.phosphorus)}\n\n"
+        
+        # Potassium
+        if latest.potassium is not None:
+            summary += f"🧪 **Potassium (K: {latest.potassium:.2f}):** {self.interpretation_service.potassium_status(latest.potassium)}\n\n"
+        
+        # pH
+        if latest.ph is not None:
+            summary += f"⚗️ **pH Level ({latest.ph:.2f}):** {self.interpretation_service.ph_status(latest.ph)}\n"
         
         return summary
 

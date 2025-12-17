@@ -5,10 +5,10 @@ import google.generativeai as genai
 class GeminiClient:
     """Client for Google Gemini API."""
     
-    def __init__(self, api_key: str):
-        """Initialize Gemini client with API key."""
+    def __init__(self, api_key: str, model_name: str = "gemini-1.5-flash"):
+        """Initialize Gemini client with API key and model name."""
         genai.configure(api_key=api_key)
-        self.model = genai.GenerativeModel('gemini-2.5-flash')
+        self.model = genai.GenerativeModel(model_name)
     
     def generate(self, prompt: str) -> str:
         response = self.model.generate_content(prompt)

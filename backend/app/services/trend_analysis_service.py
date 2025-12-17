@@ -1,5 +1,7 @@
 from sqlalchemy.orm import Session
 from app.repositories.index_repo import IndexRepository
+from app.repositories.parcel_repo import ParcelRepository
+from app.ai.factory import get_trend_summarizer
 from typing import Dict, Optional
 
 class TrendAnalysisService:
@@ -7,6 +9,8 @@ class TrendAnalysisService:
     
     def __init__(self, db: Session):
         self.index_repo = IndexRepository(db)
+        self.parcel_repo = ParcelRepository(db)
+        self.summarizer = get_trend_summarizer()
     
     def analyze_parcel_trends(self, parcel_id: str) -> Dict:
         """
@@ -32,6 +36,10 @@ class TrendAnalysisService:
                 "message": "Need at least 2 data points for trend analysis",
                 "data_points": len(indices) if indices else 0
             }
+        
+        # Get parcel name
+        parcel = self.parcel_repo.get_by_id(parcel_id)
+        parcel_name = parcel.name if parcel else parcel_id
         
         # Sort by date
         indices.sort(key=lambda x: x.date)
@@ -112,6 +120,9 @@ class TrendAnalysisService:
             )
             analysis["recommendation"] = self._get_recommendation("ph", analysis["trend"], last.ph)
             trends["trends"]["ph"] = analysis
+        
+        # Generate summary using the configured strategy (Rule-based or LLM)
+        trends["summary"] = self.summarizer.generate_trend_summary(parcel_id, parcel_name, trends)
         
         return trends
     

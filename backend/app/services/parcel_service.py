@@ -2,11 +2,14 @@ from sqlalchemy.orm import Session
 from app.models.base import Farmer, Parcel
 from app.repositories.parcel_repo import ParcelRepository
 from app.services.index_service import IndexInterpretationService
+from app.ai.factory import get_summary_generator
+from app.ai.summaries import LLMSummaryGenerator
 
 class ParcelService:
     def __init__(self, db: Session):
         self.parcel_repo = ParcelRepository(db)
         self.index_interpreter = IndexInterpretationService()
+        self.summary_generator = get_summary_generator()
     
     def get_all_parcels(self):
         """Get all parcels."""
@@ -93,41 +96,13 @@ class ParcelService:
         
         latest = indices[0]
         
-        # Generate status summary
-        summary = f"**Status Summary for Parcel {parcel.id}: {parcel.name}**\n"
-        summary += f"({parcel.area_ha} ha, {parcel.crop})\n"
-        summary += f"Data from: {latest.date}\n\n"
+        # Prepare data for summary generation
+        indices_data = {
+            "latest_index": latest,
+            "parcel_name": parcel.name,
+            "area_ha": parcel.area_ha,
+            "crop": parcel.crop
+        }
         
-        # Vegetation status
-        if latest.ndvi is not None:
-            summary += f"🌱 **Vegetation (NDVI: {latest.ndvi:.2f}):** {self.index_interpreter.ndvi_status(latest.ndvi)}\n\n"
-        
-        # Moisture status
-        if latest.ndmi is not None:
-            summary += f"💧 **Moisture (NDMI: {latest.ndmi:.2f}):** {self.index_interpreter.ndmi_status(latest.ndmi)}\n\n"
-        
-        # Water status
-        if latest.ndwi is not None:
-            summary += f"💦 **Water (NDWI: {latest.ndwi:.2f}):** {self.index_interpreter.ndwi_status(latest.ndwi)}\n\n"
-        
-        # Soil organic carbon
-        if latest.soc is not None:
-            summary += f"🌾 **Soil Organic Carbon (SOC: {latest.soc:.2f}):** {self.index_interpreter.soc_status(latest.soc)}\n\n"
-        
-        # Nitrogen
-        if latest.nitrogen is not None:
-            summary += f"🧪 **Nitrogen (N: {latest.nitrogen:.2f}):** {self.index_interpreter.nitrogen_status(latest.nitrogen)}\n\n"
-        
-        # Phosphorus
-        if latest.phosphorus is not None:
-            summary += f"🧪 **Phosphorus (P: {latest.phosphorus:.2f}):** {self.index_interpreter.phosphorus_status(latest.phosphorus)}\n\n"
-        
-        # Potassium
-        if latest.potassium is not None:
-            summary += f"🧪 **Potassium (K: {latest.potassium:.2f}):** {self.index_interpreter.potassium_status(latest.potassium)}\n\n"
-        
-        # pH
-        if latest.ph is not None:
-            summary += f"⚗️ **pH Level ({latest.ph:.2f}):** {self.index_interpreter.ph_status(latest.ph)}\n"
-        
-        return summary
+        # Generate summary using the configured strategy (AI or Rule-Based)
+        return self.summary_generator.generate_parcel_summary(parcel.id, indices_data)

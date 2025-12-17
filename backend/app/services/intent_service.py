@@ -1,76 +1,75 @@
-from typing import Optional, Tuple
+from typing import Optional
 import re
-import os
+from sqlalchemy.orm import Session
+from app.ai.factory import get_intent_classifier
+from app.services.farmer_service import FarmerService
+from app.services.parcel_service import ParcelService
+from app.services.report_service import ReportService
 
 class IntentService:
-    # sets - fast membership checks
-    LIST_KEYWORDS = {"parcels", "fields"}
-    DETAIL_KEYWORDS = {"detail", "details", "about", "information", "info"}
-    STATUS_KEYWORDS = {"how", "status", "summary", "condition", "health"}
-    SET_KEYWORDS = {"set", "make", "change", "update"}
-    REPORT_KEYWORDS = {"report", "reports", "frequency"}
-    ACTION_KEYWORDS = {"show", "list", "see", "get", "what", "tell", "give"}
+    def __init__(self, db: Session = None):
+        # db is optional to maintain backward compatibility if used statically, 
+        # but required for full chat handling
+        if db:
+            self.farmer_service = FarmerService(db)
+            self.parcel_service = ParcelService(db)
+            self.report_service = ReportService(db)
     
+    def handle_message(self, phone: str, text: str) -> str:
+        """Handle incoming chat message and return appropriate response."""
+        if not hasattr(self, 'farmer_service'):
+            raise ValueError("IntentService must be initialized with a database session to handle messages.")
+            
+        farmer = self.farmer_service.get_by_phone(phone)
+        
+        #User not linked yet
+        if not farmer:
+            return "Welcome! Please type your username to link your account."
+        
+        # User is linked - detect intent
+        intent = self.detect_intent(text)
+        
+        if intent == "LIST_PARCELS":
+            return self.parcel_service.format_parcels_list(farmer)
+        
+        elif intent == "PARCEL_DETAILS":
+            parcel_id = self.extract_parcel_id(text)
+            if parcel_id:
+                return self.parcel_service.get_parcel_details(parcel_id, farmer)
+            else:
+                return "Please specify a parcel ID (e.g., P1, P2)."
+            
+        elif intent == "PARCEL_STATUS":
+            parcel_id = self.extract_parcel_id(text)
+            if parcel_id:
+                return self.parcel_service.get_parcel_status(parcel_id, farmer)
+            else:
+                return "Please specify a parcel ID (e.g., P1, P2)."
+            
+        elif intent == "SET_REPORT_FREQUENCY":
+            frequency = self.extract_report_frequency(text)
+            if frequency:
+                return self.report_service.set_report_frequency(phone, frequency)
+            else:
+                return "Please specify a valid frequency (e.g., 'daily', 'weekly', or '2 days')."
+            
+        elif intent == "UNKNOWN":
+                return (
+                    "Sorry, I didn’t understand your request.\n\n"
+                    "Here are some things you can ask me:\n"
+                    "- Show my parcels\n"
+                    "- Check the status of a parcel\n"
+                    "- Get details about a parcel\n"
+                    "- Change how often I receive reports"
+                )
+        else:
+            return f"Hello {farmer.username}! Your account is linked. You can now ask about your parcels."
+
     @staticmethod
     def detect_intent(message: str) -> str:
         """Detect user intent from message text."""
-        from app.config import settings
-        
-        # Check if LLM is enabled
-        use_llm = str(settings.USE_LLM).lower() == "true"
-        
-        if use_llm:
-            api_key = settings.LLM_API_KEY
-            if api_key:
-                try:
-                    return IntentService._detect_intent_with_llm(message, api_key)
-                except Exception as e:
-                    print(f"LLM intent detection failed: {e}. Falling back to rule-based.")
-        
-        # Rule-based intent detection (fallback or default)
-        return IntentService._detect_intent_rule_based(message)
-    
-    @staticmethod
-    def _detect_intent_with_llm(message: str, api_key: str) -> str:
-        """Detect intent using LLM."""
-        from app.ai.gemini_client import GeminiClient
-        from app.ai.prompts import get_intent_classification_prompt
-        
-        client = GeminiClient(api_key)
-        prompt = get_intent_classification_prompt(message)
-        result = client.generate(prompt).strip().upper()
-        
-        # Validate result
-        valid_intents = {"LIST_PARCELS", "PARCEL_DETAILS", "PARCEL_STATUS", "SET_REPORT_FREQUENCY", "UNKNOWN"}
-        if result in valid_intents:
-            return result
-        return "UNKNOWN"
-    
-    @staticmethod
-    def _detect_intent_rule_based(message: str) -> str:
-        """Detect intent using rule-based approach."""
-        message_lower = message.lower()
-        words = set(message_lower.split()) 
-        
-        # & - intersection for sets
-
-        # 4. Check for setting report frequency (e.g., "Set my report frequency to daily")
-        if (words & IntentService.SET_KEYWORDS) and (words & IntentService.REPORT_KEYWORDS or "frequency" in message_lower):
-            return "SET_REPORT_FREQUENCY"
-        
-        # 3. Check for parcel status/summary (e.g., "How is parcel P1?", "What's the status of P1?")
-        if (words & IntentService.STATUS_KEYWORDS) and IntentService._contains_parcel_id(message):
-            return "PARCEL_STATUS"
-        
-        # 2. Check for parcel details (e.g., "show details for parcel P1")
-        if (words & IntentService.DETAIL_KEYWORDS or "parcel" in message_lower) and IntentService._contains_parcel_id(message):
-            return "PARCEL_DETAILS"
-        
-        # 1. Check for list all parcels
-        if words & IntentService.LIST_KEYWORDS and words & IntentService.ACTION_KEYWORDS:
-            return "LIST_PARCELS"
-        
-        return "UNKNOWN"
+        classifier = get_intent_classifier()
+        return classifier.classify(message)
     
     @staticmethod
     def _contains_parcel_id(message: str) -> bool:
