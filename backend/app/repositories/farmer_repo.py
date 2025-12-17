@@ -15,8 +15,6 @@ class FarmerRepository:
         return self.db.query(Farmer).filter(Farmer.phone == phone).first()
     
     def get_by_username(self, username: str):
-        # Expire all cached instances to ensure we get fresh data from database
-        self.db.expire_all()
         return self.db.query(Farmer).filter(Farmer.username == username).first()
     
     def link_phone_to_farmer(self, farmer: Farmer, phone: str):
@@ -25,4 +23,8 @@ class FarmerRepository:
         self.db.commit()
         self.db.refresh(farmer)
         return farmer
+    
+    def refresh_session(self):
+        """Expire all cached instances to ensure fresh data from database."""
+        self.db.expire_all()
  

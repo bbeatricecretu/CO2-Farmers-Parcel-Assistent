@@ -3,7 +3,10 @@ from sqlalchemy.orm import sessionmaker #machine that produces DB sessions
 from app.config import settings
 from app.models.base import Base #declarative base class
 
-engine = create_engine(settings.DATABASE_URL) #create single engine object  using the database URL from config
+engine = create_engine(
+    settings.DATABASE_URL,
+    connect_args={"check_same_thread": False, "timeout": 30}
+) #create single engine object  using the database URL from config
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 def get_db():
