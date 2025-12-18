@@ -509,74 +509,60 @@ def shutdown():
 
 **Current State**: Static JSON data for indices
 
-**Extension Plan:**
+**Data Processing Pipeline:**
 
-**Step 1: TIFF Processing Service**
-```python
-# New file: app/services/tiff_processor.py
-from osgeo import gdal
-import numpy as np
+The TIFF ingestion follows this workflow using **PostGIS** for spatial operations:
 
-class TIFFProcessor:
-    def process_sentinel_image(self, tiff_path: str, parcel_geometry):
-        """Extract indices from Sentinel-2 TIFF for parcel area."""
-        dataset = gdal.Open(tiff_path)
-        
-        # Extract Red, NIR bands
-        red = dataset.GetRasterBand(4).ReadAsArray()
-        nir = dataset.GetRasterBand(8).ReadAsArray()
-        
-        # Calculate NDVI
-        ndvi = (nir - red) / (nir + red)
-        
-        # Mask by parcel geometry
-        parcel_ndvi = self._extract_parcel_area(ndvi, parcel_geometry)
-        
-        return {
-            'ndvi': float(np.mean(parcel_ndvi)),
-            'date': self._extract_acquisition_date(dataset)
-        }
+```
+pgsql
+
+TIFF (satellite raster)
+    ↓
+Compute index per pixel
+    ↓
+Aggregate per parcel polygon
+    ↓
+Store numbers in DB 
 ```
 
-**Step 2: Automated Data Pipeline**
+**Conceptual Approach:**
+
+1. **Import TIFF Files**
+   - Store TIFF files in `backend/data/tiff/` directory
+   - Organize by date: `2025-12-01_sentinel2.tif`
+   - Each TIFF contains multiple bands (Red, NIR, SWIR, etc.)
+
+2. **Compute Index per Pixel**
+   - Load TIFF bands as numpy arrays
+   - Apply index formulas pixel-by-pixel:
+     - NDVI = (NIR - Red) / (NIR + Red)
+     - NDMI = (NIR - SWIR) / (NIR + SWIR)
+     - NDWI = (Green - NIR) / (Green + NIR)
+   - Result: Index raster (same dimensions as input)
+
+3. **Aggregate per Parcel Polygon**
+   - Use parcel geometry
+   - Extract pixels that fall within each parcel boundary
+   - Calculate statistics: mean, median, std dev
+   - Handle edge cases (partial pixels, no-data values)
+
+4. **Store Numbers in Database**
+   - Insert aggregated values into `parcel_indices` table
+   - One row per parcel per date
+   - Store as float values (not raster anymore)
+
+
+**Usage:**
 ```python
-# Periodic check for new satellite images
-@scheduler.scheduled_task('daily')
-def ingest_new_satellite_data():
-    # 1. Query Copernicus/Sentinel API for new images
-    new_images = sentinel_api.get_recent_images(bbox=romania_bbox)
-    
-    # 2. Download TIFFs
-    for image in new_images:
-        tiff_path = download_image(image.url)
-        
-        # 3. Process for each parcel
-        for parcel in parcel_repo.get_all():
-            indices = tiff_processor.process_sentinel_image(
-                tiff_path, 
-                parcel.geometry
-            )
-            
-            # 4. Store in database
-            index_repo.create(
-                parcel_id=parcel.id,
-                date=indices['date'],
-                ndvi=indices['ndvi'],
-                # ... other indices
-            )
+# Manual TIFF loading
+python -c "from app.storage.load_tiff import load_tiff_to_database; \
+           load_tiff_to_database('backend/data/tiff/2025-12-01_sentinel2.tif', '2025-12-01')"
 ```
 
 **Required Changes:**
-- Install `GDAL`, `rasterio`, `numpy`
-- Add parcel geometry field (GeoJSON)
-- Create TIFF storage system (S3/local)
-- Integrate with Copernicus/Sentinel API
-- Add data quality checks
-
-**Data Sources:**
-- **Sentinel-2**: Free, 10m resolution, 5-day revisit
-- **Sentinel-1**: Radar data for all-weather monitoring
-- **Landsat 8/9**: 30m resolution, 16-day revisit
+- **Dependencies**: Install `GDAL`, `rasterio`, `shapely`, `numpy`
+- **Storage**: Create `app/storage/load_tiff.py` module for TIFF processing
+- **Data Directory**: Create `backend/data/tiff/` for storing satellite rasters
 
 ---
 
@@ -682,6 +668,34 @@ def init_db():
     if not db.query(Farmer).first():
         load_data_from_json()  # Populate from data/*.json
 ```
+
+---
+
+## 🚀 Future Development Roadmap
+
+To scale this project to production, the following enhancements are planned:
+
+### 1. Database Migration: SQLite → PostgreSQL
+**Current**: SQLite for development simplicity  
+**Future**: PostgreSQL with PostGIS extension
+
+### 2. Cloud Hosting: Azure or AWS Deployment
+**Current**: Local development server (localhost:8000)  
+**Future**: Cloud-hosted production environment
+
+### 3. WhatsApp Integration: Twilio → Meta WhatsApp Business API
+**Current**: Mock REST API interface with phone numbers  
+**Future**: Direct Meta WhatsApp Business API integration with webhooks
+
+### 4. TIFF File Ingestion Pipeline
+**Current**: Static JSON seed data for parcel indices  
+**Future**: Automated satellite imagery processing with TIFF file ingestion
+
+### 5. Cron Job Integration for Scheduled Reports
+**Current**: Manual report requests via API  
+**Future**: Automated daily/weekly report delivery with APScheduler background tasks
+
+---
 
 ## 📧 Contact
 
