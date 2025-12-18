@@ -17,8 +17,8 @@ The **CO2 Farmers Parcel Assistant** is an intelligent chatbot system that helps
 ## 🚀 Setup Instructions
 
 ### Prerequisites
-- Python 3.9+
-- PostgreSQL (or SQLite for testing)
+- Python
+- SQLite 
 - Git
 
 ### 1. Clone the Repository
