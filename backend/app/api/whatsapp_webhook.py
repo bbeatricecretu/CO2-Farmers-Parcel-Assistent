@@ -166,22 +166,12 @@ async def receive_whatsapp_message(request: Request, db: Session = Depends(get_d
 @router.get("/whatsapp")
 async def verify_webhook(request: Request):
     """
-    Webhook verification endpoint for Meta WhatsApp Business API.
+    Webhook verification endpoint.
     
-    Meta requires a GET endpoint for webhook verification.
-    Twilio doesn't need this, but we include it for future Meta migration.
+    Used for:
+    - Testing webhook connectivity
+    - Future Meta WhatsApp Business API integration (requires GET verification)
+    
+    Twilio doesn't require this endpoint.
     """
-    # For Meta WhatsApp verification
-    mode = request.query_params.get('hub.mode')
-    token = request.query_params.get('hub.verify_token')
-    challenge = request.query_params.get('hub.challenge')
-    
-    # TODO: Add verification token to settings
-    # verify_token = settings.META_WEBHOOK_VERIFY_TOKEN
-    
-    if mode == 'subscribe':
-        # For now, just acknowledge
-        logger.info("Webhook verification requested")
-        return int(challenge) if challenge else {"status": "ok"}
-    
-    return {"status": "ok", "message": "Webhook endpoint active"}
+    return {"status": "ok", "message": "WhatsApp webhook endpoint is active"}
