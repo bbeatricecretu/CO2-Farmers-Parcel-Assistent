@@ -15,6 +15,14 @@ class Settings(BaseSettings):
     LLM_API_KEY: Optional[str] = None
     LLM_MODEL: str = "gemma-3-12b"  # Default model, can be overridden in .env (e.g., gemma-2-9b-it)
     
+    # Messaging Configuration
+    MESSAGING_PROVIDER: str = "mock"  # Options: "twilio", "meta", "mock"
+    
+    # Twilio Configuration (for WhatsApp)
+    TWILIO_ACCOUNT_SID: Optional[str] = None
+    TWILIO_AUTH_TOKEN: Optional[str] = None
+    TWILIO_PHONE_NUMBER: Optional[str] = None  # Twilio WhatsApp number (e.g., +14155238886)
+    
     model_config = SettingsConfigDict(
         env_file=".env",
         case_sensitive=False,

@@ -1,6 +1,12 @@
 from fastapi import FastAPI
 from app.storage.database import init_db # load Json files and create tables 
-from app.api import manage #import router module
+from app.api import manage, whatsapp_webhook #import router modules
+
+# Ensure python-multipart is loaded for form data parsing
+try:
+    import multipart
+except ImportError:
+    raise ImportError("python-multipart is required. Install with: pip install python-multipart")
 
 app = FastAPI(title="Farmers Parcel Assistant API")
 
@@ -9,6 +15,7 @@ def startup():
     init_db() 
 
 app.include_router(manage.router) #takes routes defined in manage.py and mounts them to the app
+app.include_router(whatsapp_webhook.router) # WhatsApp webhook for Twilio/Meta integration
 
 @app.get("/") # verify that the API is running
 def root():

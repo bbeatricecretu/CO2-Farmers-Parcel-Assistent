@@ -984,6 +984,85 @@
 					"body": "{\n    \"period\": {\n        \"start_date\": \"2025-04-10\",\n        \"end_date\": \"2025-05-10\",\n        \"data_points\": 2\n    },\n    \"trends\": {\n        \"ndvi\": {\n            \"trend\": \"increasing\",\n            \"first_value\": 0.35,\n            \"last_value\": 0.5,\n            \"change\": 0.15,\n            \"interpretation\": \"vegetation is improving\",\n            \"recommendation\": \"Vegetation density and health are improving, indicating stronger crop canopy development.\"\n        },\n        \"ndwi\": {\n            \"trend\": \"increasing\",\n            \"first_value\": 0.12,\n            \"last_value\": 0.19,\n            \"change\": 0.07,\n            \"interpretation\": \"water content is increasing\",\n            \"recommendation\": \"Water presence is increasing, showing improved water availability in the soil and crops.\"\n        },\n        \"soc\": {\n            \"trend\": \"stable\",\n            \"first_value\": 1.5,\n            \"last_value\": 1.5,\n            \"change\": 0,\n            \"interpretation\": \"soil organic carbon is stable\",\n            \"recommendation\": \"Soil organic carbon remains constant, indicating balanced organic matter dynamics.\"\n        },\n        \"nitrogen\": {\n            \"trend\": \"decreasing\",\n            \"first_value\": 0.65,\n            \"last_value\": 0.6,\n            \"change\": -0.05,\n            \"interpretation\": \"nitrogen is decreasing - potential nutrient depletion\",\n            \"recommendation\": \"Nitrogen levels are dropping, indicating nutrient uptake by crops or nutrient loss from the soil.\"\n        },\n        \"phosphorus\": {\n            \"trend\": \"stable\",\n            \"first_value\": 0.3,\n            \"last_value\": 0.29,\n            \"change\": -0.01,\n            \"interpretation\": \"phosphorus is stable\",\n            \"recommendation\": \"Phosphorus levels remain steady with balanced nutrient dynamics.\"\n        },\n        \"potassium\": {\n            \"trend\": \"stable\",\n            \"first_value\": 0.5,\n            \"last_value\": 0.5,\n            \"change\": 0,\n            \"interpretation\": \"potassium is stable\",\n            \"recommendation\": \"Potassium remains at consistent levels with stable nutrient status.\"\n        },\n        \"ph\": {\n            \"trend\": \"stable\",\n            \"first_value\": 6.2,\n            \"last_value\": 6.2,\n            \"change\": 0,\n            \"interpretation\": \"pH is stable\",\n            \"recommendation\": \"Soil pH remains constant with no significant changes in acidity or alkalinity.\"\n        }\n    },\n    \"summary\": \"Hey there! Looking at your South Slope parcel (P2), things are looking really promising! Your crops are showing great improvement in density and health, and it's fantastic that water availability is also on the upswing. While your soil's organic matter and other key nutrients are staying nice and steady, it's worth keeping an eye on nitrogen as your crops are using it up.\"\n}"
 				}
 			]
+		},
+		{
+			"name": "Verify WhatsApp Webhook",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "Receive WhatsApp Message",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": [
+				{
+					"name": "List parcels",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "From",
+									"value": "whatsapp:+40745011327",
+									"type": "text"
+								},
+								{
+									"key": "Body",
+									"value": "list my parcels",
+									"type": "text"
+								},
+								{
+									"key": "MessageSid",
+									"value": "test123",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8000/webhook/whatsapp",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"webhook",
+								"whatsapp"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "xml",
+					"header": [
+						{
+							"key": "date",
+							"value": "Thu, 18 Dec 2025 15:42:53 GMT"
+						},
+						{
+							"key": "server",
+							"value": "uvicorn"
+						},
+						{
+							"key": "content-length",
+							"value": "211"
+						},
+						{
+							"key": "content-type",
+							"value": "application/xml"
+						}
+					],
+					"cookie": [],
+					"body": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Response>\n    <Message>🌾 *Your Parcels* (2 total)\n\n📍 *P7* - Valley Field\n   9.9 ha • Rapeseed\n\n📍 *P8* - Orchard Strip\n   3.8 ha • Apples</Message>\n</Response>"
+				}
+			]
 		}
 	]
 }
