@@ -227,7 +227,7 @@
 					"body": "{\n    \"parcel_id\": \"P5\",\n    \"name\": \"River Plot\",\n    \"area_ha\": 6.1,\n    \"crop\": \"Soybean\",\n    \"data_date\": \"2025-05-08\",\n    \"indices\": {\n        \"ndvi\": 0.58,\n        \"ndmi\": 0.3,\n        \"ndwi\": 0.2,\n        \"soc\": 1.9,\n        \"nitrogen\": 0.8,\n        \"phosphorus\": 0.37,\n        \"potassium\": 0.64,\n        \"ph\": 6.6\n    }\n}"
 				},
 				{
-					"name": "Status summary - Without AI",
+					"name": "Status Summary - Without AI",
 					"originalRequest": {
 						"method": "POST",
 						"header": [],
@@ -261,7 +261,7 @@
 					"header": [
 						{
 							"key": "date",
-							"value": "Wed, 17 Dec 2025 22:20:11 GMT"
+							"value": "Thu, 18 Dec 2025 12:30:42 GMT"
 						},
 						{
 							"key": "server",
@@ -269,7 +269,7 @@
 						},
 						{
 							"key": "content-length",
-							"value": "614"
+							"value": "959"
 						},
 						{
 							"key": "content-type",
@@ -277,7 +277,7 @@
 						}
 					],
 					"cookie": [],
-					"body": "{\n    \"reply\": \"**Status Summary for Parcel P1: North Field**\\n(12.3 ha, Wheat)\\nData from: 2025-05-15\\n\\n🌱 **Vegetation (NDVI: 0.68):** Vegetation is healthy and dense.\\n\\n💧 **Moisture (NDMI: 0.32):** High moisture - healthy water content.\\n\\n💦 **Water (NDWI: 0.25):** Moderate water content.\\n\\n🌾 **Soil Organic Carbon (SOC: 1.70):** Moderate soil organic content.\\n\\n🧪 **Nitrogen (N: 0.70):** Adequate nitrogen levels.\\n\\n🧪 **Phosphorus (P: 0.32):** Low phosphorus levels.\\n\\n🧪 **Potassium (K: 0.58):** Adequate potassium levels.\\n\\n⚗️ **pH Level (6.40):** Good pH - ideal for most crops.\\n\"\n}"
+					"body": "{\n    \"reply\": \"**Current Status for Parcel P1 - North Field**\\n(12.3 ha, Wheat)\\n\\n**Vegetation (NDVI: 0.68):** Vegetation is healthy and dense.\\n\\n**Moisture (NDMI: 0.32):** High moisture - healthy water content.\\n\\n**Water (NDWI: 0.25):** Moderate water content.\\n\\n**Soil Organic Carbon (SOC: 1.70):** Moderate soil organic content.\\n\\n**Nitrogen (N: 0.70):** Adequate nitrogen levels.\\n\\n**Phosphorus (P: 0.32):** Low phosphorus levels.\\n\\n**Potassium (K: 0.58):** Adequate potassium levels.\\n\\n**pH Level (6.40):** Good pH - ideal for most crops.\\n\\n---\\n\\n**Overall Parcel Status:**\\n- Good: 3/8 indices\\n- Moderate: 4/8 indices\\n- Poor: 1/8 indices\\n\\n**Summary:  **GOOD** - Parcel is performing well with minor areas for improvement. **\\n\\nThe parcel is in good health. Focus on improving the moderate indices through targeted interventions such as adjusting irrigation or applying specific fertilizers where needed.. \\n\\nLast measured on 2025-05-15.\\n\\n\"\n}"
 				},
 				{
 					"name": "Status summary - AI",

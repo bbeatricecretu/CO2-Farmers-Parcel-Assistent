@@ -363,8 +363,29 @@ NDVI 0.3-0.6: "Moderate" ⚠️
 NDVI < 0.3:   "Poor" ❌
 ```
 
-### Recommendations Engine
-Condition-based recommendations:
+### Overall Parcel Status Assessment
+The system counts how many indices are in good, moderate, or poor condition and provides an overall parcel status:
+
+**Classification Thresholds (per index):**
+- **NDVI**: Good ≥0.55 | Moderate 0.30-0.55 | Poor <0.30
+- **NDMI**: Good >0.30 | Moderate 0.15-0.30 | Poor <0.15
+- **NDWI**: Good >0.25 | Moderate 0.10-0.25 | Poor <0.10
+- **SOC**: Good >2.5 | Moderate 1.5-2.5 | Poor <1.5
+- **Nitrogen**: Good >1.0 | Moderate 0.7-1.0 | Poor <0.7
+- **Phosphorus**: Good >0.45 | Moderate 0.35-0.45 | Poor <0.35
+- **Potassium**: Good >0.7 | Moderate 0.55-0.7 | Poor <0.55
+- **pH**: Good 6.0-7.0 | Moderate 5.5-6.0 or 7.0-7.5 | Poor <5.5 or >7.5
+
+**Overall Status:**
+- 🟢 **EXCELLENT**: ≥60% indices are good → "Continue current management practices"
+- 🟡 **GOOD**: ≥70% indices are good or moderate → "Focus on improving moderate indices"
+- 🟠 **MODERATE**: Mixed results → "Regular monitoring advised"
+- 🔴 **NEEDS ATTENTION**: ≥50% indices are poor → "Immediate action required"
+
+Each status includes a hardcoded recommendation for farmers to take appropriate action.
+
+### Index-Specific Recommendations
+Condition-based recommendations per index:
 - Low NDVI → "Consider fertilization or irrigation"
 - Low NDMI → "Monitor moisture, irrigation may be needed"
 - Low Nitrogen → "Apply nitrogen-based fertilizer"
