@@ -378,6 +378,26 @@ Condition-based recommendations:
 
 **Current State**: Mock phone-based interface via REST API
 
+**Message Flow Architecture:**
+```
+Farmer
+  |
+  | WhatsApp message
+  v
+WhatsApp (Twilio / Meta)
+  |
+  | HTTP POST (webhook)
+  v
+YOUR FastAPI backend
+  |
+  | handle_message()
+  v
+Reply text
+  |
+  v
+WhatsApp → Farmer
+```
+
 **Extension Plan:**
 ```python
 # Use Twilio or WhatsApp Business API
@@ -410,36 +430,78 @@ def receive_whatsapp_message(request):
 
 **Current State**: Report frequency stored but not scheduled
 
-**Extension Plan:**
+**Approach:**
+
+Create a background task that runs daily at a predefined hour (e.g., 8 AM), queries the `farmer_reports` table in the database, and determines which farmers should receive reports today based on their last report date and configured frequency.
+
+**Key Concepts:**
+
+1. **Database-Driven Scheduling**
+   - Store `last_sent_date` and `next_report_date` in `farmer_reports` table
+   - Calculate `next_report_date` automatically based on frequency setting
+
+2. **Frequency Calculation Logic**
+   - `"daily"` → next_date = last_sent + 1 day
+   - `"weekly"` → next_date = last_sent + 7 days
+   - `"3 days"` → next_date = last_sent + 3 days
+
+
+**Implementation File:**
+
 ```python
-# Use APScheduler or Celery
+# app/scheduler.py
 from apscheduler.schedulers.background import BackgroundScheduler
+from datetime import date
 
 def send_scheduled_reports():
-    """Run daily to check and send reports."""
-    reports = report_repo.get_pending_reports()
+    """Background task: Check farmer_reports table and send due reports."""
+    db = SessionLocal()
     
-    for report in reports:
-        farmer = farmer_repo.get_by_phone(report.phone)
-        summary = report_service.generate_summary(farmer)
+    try:
+        # 1. Query database for farmers due for reports today
+        today = date.today()
+        farmers_due = report_repo.get_farmers_due_for_report(today)
         
-        # Send via WhatsApp
-        send_whatsapp_message(report.phone, summary)
+        # 2. Generate reports for all due farmers
+        reports = report_service.generate_reports_for_farmers(farmers_due)
         
-        # Update next_report_date
-        report_repo.update_next_date(report)
+        # 3. Send reports 
+        ...
+            
+        # 4. Update last_sent_date and next_report_date in database
+         report_repo.update_last_sent(report['phone'], today)
+            
+    except Exception as e:
+        print(f"Error in scheduled report task: {e}")
+    finally:
+        db.close()
 
-# Schedule
+# Initialize scheduler
 scheduler = BackgroundScheduler()
-scheduler.add_job(send_scheduled_reports, 'cron', hour=8)  # 8 AM daily
+scheduler.add_job(send_scheduled_reports, 'cron', hour=8, minute=0)
 scheduler.start()
 ```
 
+**Integration into FastAPI:**
+```python
+# app/main.py
+@app.on_event("startup")
+def startup():
+    init_db()
+    scheduler.start()  # Start background scheduler
+
+@app.on_event("shutdown")
+def shutdown():
+    scheduler.shutdown()  # Gracefully stop scheduler
+```
+
 **Required Changes:**
-- Add `next_report_date` field to `FarmerReport` model
-- Install `apscheduler` or `celery`
-- Create background task runner
-- Add report history tracking
+- **Database**: Add `last_sent_date` and `next_report_date` columns to `FarmerReport` model
+- **Repository**: Add `get_farmers_due_for_report()` and `update_last_sent()` methods
+- **Service**: Add `generate_reports_for_farmers()` batch method that iterates all farmers and their parcels
+- **Scheduler**: Create `scheduler.py` with APScheduler configuration
+- **Dependencies**: Install `apscheduler` package
+- **Lifecycle**: Integrate scheduler start/stop into FastAPI events
 
 ---
 
