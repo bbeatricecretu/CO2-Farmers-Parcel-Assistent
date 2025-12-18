@@ -106,17 +106,8 @@ The server will start at:
 The project includes comprehensive tests for all services and repositories:
 
 ```bash
-# Run all tests
-pytest
-
-# Run with verbose output
-pytest -v
-
-# Run specific test file
-pytest tests/test_farmer_service.py
-
-# Run with coverage
-pytest --cov=app tests/
+cd backend
+python -m pytest -v
 ```
 
 **Test Coverage:**
