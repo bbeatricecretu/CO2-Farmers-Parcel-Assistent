@@ -25,7 +25,6 @@ def format_whatsapp_message(data) -> str:
     if isinstance(data, str):
         # Format status messages that contain "Overall Status:"
         if "Overall Status:" in data:
-            # Add header emoji for status reports
             data = "📋 *Parcel Status Report*\n\n" + data
         # Format report frequency confirmation
         elif "report frequency has been set" in data.lower():
