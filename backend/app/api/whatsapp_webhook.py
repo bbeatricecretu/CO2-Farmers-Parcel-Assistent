@@ -19,6 +19,78 @@ def get_messenger_lazy():
     return get_messenger()
 
 
+def format_whatsapp_message(data) -> str:
+    """Format response data into a nice WhatsApp message."""
+    # If already a string, check if it needs formatting
+    if isinstance(data, str):
+        # Format status messages that contain "Overall Status:"
+        if "Overall Status:" in data:
+            # Add header emoji for status reports
+            data = "📋 *Parcel Status Report*\n\n" + data
+        # Format report frequency confirmation
+        elif "report frequency has been set" in data.lower():
+            data = "✅ " + data
+        # Add emoji to error messages
+        elif "not found" in data.lower() or "does not belong" in data.lower():
+            data = "❌ " + data
+        elif "No data available" in data:
+            data = "⚠️ " + data
+        elif "Invalid frequency" in data:
+            data = "❌ " + data
+        # Format welcome/help messages
+        elif "Here are some things you can ask me" in data:
+            data = "❓ " + data
+        elif "Welcome!" in data or "Please type your username" in data:
+            data = "👋 " + data
+        return data
+    
+    # If it's a dict, format based on content
+    if isinstance(data, dict):
+        # Error messages
+        if "error" in data:
+            return f"❌ {data['error']}"
+        
+        # List of parcels
+        if "parcels" in data:
+            parcels = data["parcels"]
+            if not parcels:
+                return "You have no parcels registered."
+            
+            message = f"🌾 *Your Parcels* ({len(parcels)} total)\n\n"
+            for p in parcels:
+                message += f"📍 *{p['id']}* - {p['name']}\n"
+                message += f"   {p['area']} ha • {p['crop']}\n\n"
+            return message.strip()
+        
+        # Parcel details with indices
+        if "parcel_id" in data and "indices" in data:
+            msg = f"📊 *{data['parcel_id']} - {data['name']}*\n"
+            msg += f"🌱 Crop: {data['crop']}\n"
+            msg += f"📏 Area: {data['area_ha']} ha\n\n"
+            
+            if data['indices']:
+                msg += f"📅 Data from: {data['data_date']}\n\n"
+                indices = data['indices']
+                msg += "*Vegetation Indices:*\n"
+                if indices.get('ndvi'): msg += f"  NDVI: {indices['ndvi']}\n"
+                if indices.get('ndmi'): msg += f"  NDMI: {indices['ndmi']}\n"
+                if indices.get('ndwi'): msg += f"  NDWI: {indices['ndwi']}\n"
+                
+                msg += "\n*Soil Properties:*\n"
+                if indices.get('soc'): msg += f"  SOC: {indices['soc']}%\n"
+                if indices.get('nitrogen'): msg += f"  Nitrogen: {indices['nitrogen']} ppm\n"
+                if indices.get('phosphorus'): msg += f"  Phosphorus: {indices['phosphorus']} ppm\n"
+                if indices.get('potassium'): msg += f"  Potassium: {indices['potassium']} ppm\n"
+                if indices.get('ph'): msg += f"  pH: {indices['ph']}\n"
+            else:
+                msg += "⚠️ No data available yet."
+            
+            return msg
+    
+    # Fallback: convert to string
+    return str(data)
+
+
 @router.post("/whatsapp")
 async def receive_whatsapp_message(request: Request, db: Session = Depends(get_db)):
     """
@@ -68,11 +140,10 @@ async def receive_whatsapp_message(request: Request, db: Session = Depends(get_d
         # Process message using existing intent service
         IntentService = get_intent_service_lazy()
         intent_service = IntentService(db)
-        response_text = intent_service.handle_message(clean_phone, message_body)
+        response_data = intent_service.handle_message(clean_phone, message_body)
         
-        # Convert dict response to string if needed
-        if isinstance(response_text, dict):
-            response_text = str(response_text)
+        # Format response for WhatsApp
+        response_text = format_whatsapp_message(response_data)
         
         logger.info(f"Generated response for {clean_phone}: {str(response_text)[:100]}...")
         
