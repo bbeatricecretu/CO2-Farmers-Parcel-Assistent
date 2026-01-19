@@ -2,7 +2,7 @@
 
 ## 📋 What This Project Does
 
-The **CO2 Farmers Parcel Assistant** is an intelligent chatbot system that helps farmers monitor and manage their agricultural parcels through conversational interactions. The system provides real-time insights about vegetation health, soil conditions, moisture levels, and crop trends based on satellite-derived indices.
+The **Farmers Parcel Assistant** is an intelligent chatbot system that helps farmers monitor and manage their agricultural parcels through conversational interactions. The system provides real-time insights about vegetation health, soil conditions, moisture levels, and crop trends based on satellite-derived indices.
 
 **Key Features:**
 - 💬 **Conversational Interface**: Natural language interaction for querying parcel information
@@ -206,7 +206,7 @@ Visit http://localhost:8000/docs for a Swagger UI where you can:
 
 ### Directory Structure
 ```
-CO2-Farmers-Parcel-Assistent/
+Farmers-Parcel-Assistent/
 ├── README.md                          # This file
 ├── requirements.txt                   # Python dependencies
 ├── CO2-Farmers-Parcel-Assistent.postman_collection.json  # API tests
