@@ -709,3 +709,7 @@ To scale this project to production, the following enhancements are planned:
 **Email:** [cretu.beatricedenisa@gmail.com](mailto:cretu.beatricedenisa@gmail.com)  
 **LinkedIn:** [linkedin.com/in/beatrice-cretu-551b6a380](https://www.linkedin.com/in/beatrice-cretu-551b6a380/)  
 **GitHub:** [github.com/bbeatricecretu](https://github.com/bbeatricecretu)
+
+---
+## License
+ CO2 Angels Farm Assistent - Internal Project 
